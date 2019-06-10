@@ -37,11 +37,6 @@
         </dependency>
         <dependency>
             <groupId>com.pcis</groupId>
-            <artifactId>smartbus-admin</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.pcis</groupId>
             <artifactId>smartbus-socket</artifactId>
             <version>${project.version}</version>
         </dependency>
