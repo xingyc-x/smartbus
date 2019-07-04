@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS `smartbus_user`;
 CREATE TABLE `smartbus_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL COMMENT '用户名',
+  `real_name` varchar(50) NOT NULL COMMENT '真实姓名',
   `password` varchar(32) NOT NULL COMMENT '密码，加密存储',
   `phone` varchar(20) DEFAULT NULL COMMENT '注册手机号',
   `email` varchar(50) DEFAULT NULL COMMENT '注册邮箱',
