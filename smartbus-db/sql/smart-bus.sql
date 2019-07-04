@@ -26,8 +26,94 @@ CREATE TABLE `smartbus_user` (
   `email` varchar(50) DEFAULT NULL COMMENT '注册邮箱',
   `created` datetime NOT NULL,
   `updated` datetime NOT NULL,
+  `capacity` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`) USING BTREE,
   UNIQUE KEY `phone` (`phone`) USING BTREE,
   UNIQUE KEY `email` (`email`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE project
+(
+id bigint(20) NOT NULL AUTO_INCREMENT,
+name varchar(255),
+place varchar(255),
+image_path varchar(255),
+belong varchar(255),
+introduction varchar(1000),
+PRIMARY KEY (id),
+UNIQUE KEY `id` (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='项目表';
+
+DROP TABLE IF EXISTS `floor`;
+CREATE TABLE floor
+(
+id varchar(50) NOT NULL,
+place varchar(255),
+image_path varchar(255),
+project_id bigint(20) NOT NULL,
+PRIMARY KEY (id),
+UNIQUE KEY `id` (`id`) USING BTREE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='楼层表';
+
+DROP TABLE IF EXISTS `sender`;
+CREATE TABLE sender
+(
+mac varchar(50)NOT NULL UNIQUE,
+name varchar(100),
+place varchar(255),
+floor_id varchar(50) NOT NULL,
+PRIMARY KEY (mac),
+KEY `floor_id` (`floor_id`) USING BTREE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据发送器表';
+
+DROP TABLE IF EXISTS `data_point`;
+CREATE TABLE data_point
+(
+id varchar(50) NOT NULL,
+name varchar(255),
+place varchar(255),
+unit varchar(30),
+upper_bound float,
+lower_bound float,
+sender_mac varchar(255) NOT NULL,
+PRIMARY KEY (id),
+UNIQUE KEY `id` (`id`) USING BTREE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据点表';
+
+DROP TABLE IF EXISTS `operation_log`;
+CREATE TABLE operation_log
+(
+id bigint(20) NOT NULL AUTO_INCREMENT,
+content varchar(500),
+user_name varchar(50),
+time datetime NOT NULL,
+PRIMARY KEY (id),
+KEY `time` (`time`) USING BTREE
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='操作记录表';
+
+DROP TABLE IF EXISTS `report_form`;
+CREATE TABLE report_form
+(
+id bigint(20) NOT NULL AUTO_INCREMENT,
+name varchar(100) NOT NULL,
+content varchar(5000),
+project_id bigint(20) NOT NULL,
+PRIMARY KEY (id),
+UNIQUE KEY `name` (`name`) USING BTREE
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='报表';
+
+DROP TABLE IF EXISTS `project_user_relation`;
+CREATE TABLE project_user_relation
+(
+id bigint(20) NOT NULL AUTO_INCREMENT,
+project_id bigint(20),
+user_name varchar(50),
+PRIMARY KEY (id),
+KEY `project_id` (`project_id`) USING BTREE,
+KEY `user_name` (`user_name`) USING BTREE
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='项目用户关系表';
+
+

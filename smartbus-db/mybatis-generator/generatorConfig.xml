@@ -16,13 +16,14 @@
         <!-- 自动生成equals方法和hashcode方法 -->
         <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
 
+
         <!-- 非官方插件 https://github.com/itfsw/mybatis-generator-plugin -->
         <!-- 查询单条数据插件 -->
         <plugin type="com.itfsw.mybatis.generator.plugins.SelectOneByExamplePlugin"/>
         <!-- 查询结果选择性返回插件 -->
         <plugin type="com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"/>
         <!-- Example Criteria 增强插件 -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin"/>
+       <plugin type="com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin"/>
         <!-- 数据Model属性对应Column获取插件 -->
         <plugin type="com.itfsw.mybatis.generator.plugins.ModelColumnPlugin"/>
         <!-- 逻辑删除插件 -->
@@ -45,7 +46,7 @@
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/smartbus?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
                         userId="root"
-                        password="625611"/>
+                        password="xingyongchen"/>
 
         <javaTypeResolver>
             <property name="useJSR310Types" value="true"/>
@@ -57,6 +58,29 @@
                              targetProject="src/main/java"/>
         <!--表名-->
         <table tableName="smartbus_user">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="project">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="floor">
+           <!-- <generatedKey column="id" sqlStatement="MySql" identity="true"/> -->
+        </table>
+        <table tableName="sender">
+            <!-- <generatedKey column="id" sqlStatement="MySql" identity="true"/> -->
+        </table>
+        <table tableName="data_point">
+            <!-- <generatedKey column="id" sqlStatement="MySql" identity="true"/> -->
+        </table>
+        <table tableName="operation_log">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="report_form">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="project_user_relation">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
