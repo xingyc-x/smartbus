@@ -60,23 +60,8 @@
         <table tableName="smartbus_user">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="project">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="floor">
-           <!-- <generatedKey column="id" sqlStatement="MySql" identity="true"/> -->
-        </table>
-        <table tableName="sender">
-            <!-- <generatedKey column="id" sqlStatement="MySql" identity="true"/> -->
-        </table>
-        <table tableName="data_point">
-            <!-- <generatedKey column="id" sqlStatement="MySql" identity="true"/> -->
-        </table>
-        <table tableName="operation_log">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
 
-        <table tableName="report_form">
+        <table tableName="company">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 

@@ -8,6 +8,8 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,6 +24,8 @@ import java.util.Random;
 public class UserServiceImpl implements UserService {
 
     private SqlSession session;
+    private SmartbusUserMapper smartbusUserMapper;
+    private Logger logger;
 
     public UserServiceImpl(){
         try {
@@ -29,64 +33,110 @@ public class UserServiceImpl implements UserService {
             InputStream inputStream = Resources.getResourceAsStream(resource);
             SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
             session = sqlSessionFactory.openSession();
+            smartbusUserMapper = session.getMapper(SmartbusUserMapper.class);
+            logger = Logger.getLogger(UserServiceImpl.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-    }
-
-    public  String getRandomString2(int length){
-        Random random=new Random();
-        StringBuffer sb=new StringBuffer();
-        for(int i=0;i<length;i++){
-            int number=random.nextInt(2);
-            long result=0;
-            switch(number){
-                case 0:
-                    result=Math.round(Math.random()*25+65);
-                    sb.append(String.valueOf((char)result));
-                    break;
-                case 1:
-                    result=Math.round(Math.random()*25+97);
-                    sb.append(String.valueOf((char)result));
-                    break;
-                case 2:
-                    sb.append(String.valueOf(new Random().nextInt(10)));
-                    break;
-            }
-
-
-        }
-        return sb.toString();
     }
 
     @Override
-    public boolean register(String name, String password) throws Exception {
-        System.out.println("I am here!");
+    public boolean register(String userName, String realName, String password, String phone, String email, int capacity, int companyId) throws Exception {
         SmartbusUser smartbusUser = new SmartbusUser();
-        smartbusUser.setUsername(getRandomString2(10));
+        smartbusUser.setUserName(userName);
+        smartbusUser.setRealName(realName);
         smartbusUser.setPassword(password);
+        smartbusUser.setPhone(phone);
+        smartbusUser.setEmail(email);
+        smartbusUser.setCapacity(capacity);
+        smartbusUser.setCompanyId(companyId);
         LocalDateTime localDateTime = LocalDateTime.now();
         smartbusUser.setCreated(localDateTime);
         smartbusUser.setUpdated(localDateTime);
-        smartbusUser.setId((long)2);
-        SmartbusUserMapper smartbusUserMapper = session.getMapper(SmartbusUserMapper.class);
         try {
-            while (true) {
-                smartbusUser.setUsername(getRandomString2(10));
                 int result = smartbusUserMapper.insert(smartbusUser);
                 session.commit();
 
-            }
-            //session.commit();
-            //session.commit();
-            //List<SmartbusUser> smartbusUserList = session.selectList("selectAll");
-            //System.out.println(smartbusUserList);
-            //System.out.println("every things is ok!");
-        } catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception e) {
+            logger.error(e.getMessage());
         }
-
         return true;
+    }
+
+
+    @Override
+    public SmartbusUser geUserByName(String userName) {
+        try {
+            SmartbusUser smartbusUser = smartbusUserMapper.selectByUserName(userName);
+            return smartbusUser;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public  int getUserNum() {
+        return smartbusUserMapper.getUserNum();
+    }
+
+    @Override
+    public List<SmartbusUser> getAPageUser(int pageNo, int pageSize, String sortBy, String direction) {
+        if (pageNo == 0 ) {
+            return null;
+        }
+        int startNo = (pageNo - 1) * pageSize;
+        return smartbusUserMapper.getAPageUser(startNo, pageSize, sortBy, direction);
+//        if (direction.equals("desc")) {
+//            return smartbusUserMapper.getAPageUserDesc(startNo, pageSize, sortBy);
+//        } else if (direction.equals("asc")) {
+//            return smartbusUserMapper.getAPageUserAsc(startNo, pageSize, sortBy);
+//        }
+//        return null;
+    }
+
+    @Override
+    public  List<SmartbusUser> getAPageUserBySearch(int pageNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput) {
+        if (pageNo == 0 ) {
+            return null;
+        }
+        int startNo = (pageNo - 1) * pageSize;
+
+        switch (searchIf) {
+            //查询类型为姓名
+            case 1:
+                return smartbusUserMapper.getAPageUserByNameSearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
+
+            //查询类型为单位；
+            case 2:
+                return smartbusUserMapper.getAPageUserByCompanySearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
+
+                //查询类型为权限等级
+             case 3:
+                return smartbusUserMapper.getAPageUserByCapacity(startNo, pageSize, sortBy, direction, Integer.valueOf(searchInput));
+            default:
+                return null;
+
+        }
+    }
+
+    @Override
+    public int getUserNumBySearch(int searchIf, String searchInput) {
+        switch (searchIf) {
+            //查询类型为姓名
+            case 1:
+                return smartbusUserMapper.getUserNumByNameSearch("%" + searchInput + "%");
+
+            //查询类型为单位；
+            case 2:
+                return smartbusUserMapper.getUserNumByCompanySearch("%" + searchInput + "%");
+
+            //查询类型为权限等级
+            case 3:
+                return smartbusUserMapper.getUserNumByCapacity(Integer.valueOf(searchInput));
+            default:
+                return 0;
+        }
     }
 
 }

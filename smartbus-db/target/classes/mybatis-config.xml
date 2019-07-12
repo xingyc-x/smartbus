@@ -29,5 +29,9 @@
     <!-- 配置映射文件：用来配置sql语句和结果集类型等 -->
     <mappers>
         <mapper resource="com/pcis/smartbus/db/dao/SmartbusUserMapper.xml"/>
+        <mapper resource="com/pcis/smartbus/db/dao/SmartbusUserManualMapper.xml"/>
+        <mapper resource="com/pcis/smartbus/db/dao/ProjectUserRelationMapper.xml"/>
+        <mapper resource="com/pcis/smartbus/db/dao/CompanyMapper.xml"/>
+        <mapper resource="com/pcis/smartbus/db/dao/CompanyManualMapper.xml"/>
     </mappers>
 </configuration>

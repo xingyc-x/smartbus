@@ -272,7 +272,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Long value) {
+        public Criteria andIdEqualTo(Integer value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
@@ -288,7 +288,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Long value) {
+        public Criteria andIdNotEqualTo(Integer value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
@@ -304,7 +304,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Long value) {
+        public Criteria andIdGreaterThan(Integer value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
@@ -320,7 +320,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
@@ -336,7 +336,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Long value) {
+        public Criteria andIdLessThan(Integer value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
@@ -352,7 +352,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Long value) {
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
@@ -368,22 +368,22 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Long> values) {
+        public Criteria andIdIn(List<Integer> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Long> values) {
+        public Criteria andIdNotIn(List<Integer> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Long value1, Long value2) {
+        public Criteria andIdBetween(Integer value1, Integer value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Long value1, Long value2) {
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -398,7 +398,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdEqualTo(Long value) {
+        public Criteria andProjectIdEqualTo(Integer value) {
             addCriterion("project_id =", value, "projectId");
             return (Criteria) this;
         }
@@ -414,7 +414,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdNotEqualTo(Long value) {
+        public Criteria andProjectIdNotEqualTo(Integer value) {
             addCriterion("project_id <>", value, "projectId");
             return (Criteria) this;
         }
@@ -430,7 +430,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdGreaterThan(Long value) {
+        public Criteria andProjectIdGreaterThan(Integer value) {
             addCriterion("project_id >", value, "projectId");
             return (Criteria) this;
         }
@@ -446,7 +446,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andProjectIdGreaterThanOrEqualTo(Integer value) {
             addCriterion("project_id >=", value, "projectId");
             return (Criteria) this;
         }
@@ -462,7 +462,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdLessThan(Long value) {
+        public Criteria andProjectIdLessThan(Integer value) {
             addCriterion("project_id <", value, "projectId");
             return (Criteria) this;
         }
@@ -478,7 +478,7 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdLessThanOrEqualTo(Long value) {
+        public Criteria andProjectIdLessThanOrEqualTo(Integer value) {
             addCriterion("project_id <=", value, "projectId");
             return (Criteria) this;
         }
@@ -494,54 +494,38 @@ public class ProjectUserRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdIn(List<Long> values) {
+        public Criteria andProjectIdIn(List<Integer> values) {
             addCriterion("project_id in", values, "projectId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdNotIn(List<Long> values) {
+        public Criteria andProjectIdNotIn(List<Integer> values) {
             addCriterion("project_id not in", values, "projectId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdBetween(Long value1, Long value2) {
+        public Criteria andProjectIdBetween(Integer value1, Integer value2) {
             addCriterion("project_id between", value1, value2, "projectId");
             return (Criteria) this;
         }
 
-        public Criteria andProjectIdNotBetween(Long value1, Long value2) {
+        public Criteria andProjectIdNotBetween(Integer value1, Integer value2) {
             addCriterion("project_id not between", value1, value2, "projectId");
             return (Criteria) this;
         }
 
-        public Criteria andUserNameIsNull() {
-            addCriterion("user_name is null");
+        public Criteria andUserIdIsNull() {
+            addCriterion("user_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserNameIsNotNull() {
-            addCriterion("user_name is not null");
+        public Criteria andUserIdIsNotNull() {
+            addCriterion("user_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserNameEqualTo(String value) {
-            addCriterion("user_name =", value, "userName");
-            return (Criteria) this;
-        }
-
-        /**
-         * This method was generated by MyBatis Generator.
-         * This method corresponds to the database table project_user_relation
-         *
-         * @mbg.generated
-         */
-        public Criteria andUserNameEqualToColumn(ProjectUserRelation.Column column) {
-            addCriterion(new StringBuilder("user_name = ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andUserNameNotEqualTo(String value) {
-            addCriterion("user_name <>", value, "userName");
+        public Criteria andUserIdEqualTo(Integer value) {
+            addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
@@ -551,29 +535,13 @@ public class ProjectUserRelationExample {
          *
          * @mbg.generated
          */
-        public Criteria andUserNameNotEqualToColumn(ProjectUserRelation.Column column) {
-            addCriterion(new StringBuilder("user_name <> ").append(column.getEscapedColumnName()).toString());
+        public Criteria andUserIdEqualToColumn(ProjectUserRelation.Column column) {
+            addCriterion(new StringBuilder("user_id = ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andUserNameGreaterThan(String value) {
-            addCriterion("user_name >", value, "userName");
-            return (Criteria) this;
-        }
-
-        /**
-         * This method was generated by MyBatis Generator.
-         * This method corresponds to the database table project_user_relation
-         *
-         * @mbg.generated
-         */
-        public Criteria andUserNameGreaterThanColumn(ProjectUserRelation.Column column) {
-            addCriterion(new StringBuilder("user_name > ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andUserNameGreaterThanOrEqualTo(String value) {
-            addCriterion("user_name >=", value, "userName");
+        public Criteria andUserIdNotEqualTo(Integer value) {
+            addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
@@ -583,29 +551,13 @@ public class ProjectUserRelationExample {
          *
          * @mbg.generated
          */
-        public Criteria andUserNameGreaterThanOrEqualToColumn(ProjectUserRelation.Column column) {
-            addCriterion(new StringBuilder("user_name >= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andUserIdNotEqualToColumn(ProjectUserRelation.Column column) {
+            addCriterion(new StringBuilder("user_id <> ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andUserNameLessThan(String value) {
-            addCriterion("user_name <", value, "userName");
-            return (Criteria) this;
-        }
-
-        /**
-         * This method was generated by MyBatis Generator.
-         * This method corresponds to the database table project_user_relation
-         *
-         * @mbg.generated
-         */
-        public Criteria andUserNameLessThanColumn(ProjectUserRelation.Column column) {
-            addCriterion(new StringBuilder("user_name < ").append(column.getEscapedColumnName()).toString());
-            return (Criteria) this;
-        }
-
-        public Criteria andUserNameLessThanOrEqualTo(String value) {
-            addCriterion("user_name <=", value, "userName");
+        public Criteria andUserIdGreaterThan(Integer value) {
+            addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
@@ -615,38 +567,76 @@ public class ProjectUserRelationExample {
          *
          * @mbg.generated
          */
-        public Criteria andUserNameLessThanOrEqualToColumn(ProjectUserRelation.Column column) {
-            addCriterion(new StringBuilder("user_name <= ").append(column.getEscapedColumnName()).toString());
+        public Criteria andUserIdGreaterThanColumn(ProjectUserRelation.Column column) {
+            addCriterion(new StringBuilder("user_id > ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andUserNameLike(String value) {
-            addCriterion("user_name like", value, "userName");
+        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserNameNotLike(String value) {
-            addCriterion("user_name not like", value, "userName");
+        /**
+         * This method was generated by MyBatis Generator.
+         * This method corresponds to the database table project_user_relation
+         *
+         * @mbg.generated
+         */
+        public Criteria andUserIdGreaterThanOrEqualToColumn(ProjectUserRelation.Column column) {
+            addCriterion(new StringBuilder("user_id >= ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andUserNameIn(List<String> values) {
-            addCriterion("user_name in", values, "userName");
+        public Criteria andUserIdLessThan(Integer value) {
+            addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserNameNotIn(List<String> values) {
-            addCriterion("user_name not in", values, "userName");
+        /**
+         * This method was generated by MyBatis Generator.
+         * This method corresponds to the database table project_user_relation
+         *
+         * @mbg.generated
+         */
+        public Criteria andUserIdLessThanColumn(ProjectUserRelation.Column column) {
+            addCriterion(new StringBuilder("user_id < ").append(column.getEscapedColumnName()).toString());
             return (Criteria) this;
         }
 
-        public Criteria andUserNameBetween(String value1, String value2) {
-            addCriterion("user_name between", value1, value2, "userName");
+        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
+            addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserNameNotBetween(String value1, String value2) {
-            addCriterion("user_name not between", value1, value2, "userName");
+        /**
+         * This method was generated by MyBatis Generator.
+         * This method corresponds to the database table project_user_relation
+         *
+         * @mbg.generated
+         */
+        public Criteria andUserIdLessThanOrEqualToColumn(ProjectUserRelation.Column column) {
+            addCriterion(new StringBuilder("user_id <= ").append(column.getEscapedColumnName()).toString());
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdIn(List<Integer> values) {
+            addCriterion("user_id in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotIn(List<Integer> values) {
+            addCriterion("user_id not in", values, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdBetween(Integer value1, Integer value2) {
+            addCriterion("user_id between", value1, value2, "userId");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
     }
