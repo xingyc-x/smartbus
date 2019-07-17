@@ -125,7 +125,4 @@ public interface CompanyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Company record);
-
-    //Here is wrote by hand.
-    List<Company> getCompanyIdBySearch(String searchContent);
 }

@@ -7,9 +7,12 @@ import java.util.List;
 
 public interface UserService {
     boolean register(String userName, String realName, String password, String phone, String email, int capacity, int companyId) throws Exception;
+    boolean register(SmartbusUser smartbusUser);
+    //如果没有该用户，则返回null
     SmartbusUser geUserByName(String userName);
     int getUserNum();
-    List<SmartbusUser> getAPageUser(int pageNo, int pageSize, String sortBy, String direction);
-    List<SmartbusUser> getAPageUserBySearch(int pageNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput);
+    List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction);
+    List<SmartbusUser> getAPageUserBySearch(int startNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput);
     int getUserNumBySearch(int searchIf, String searchInput);
+    SmartbusUser getUserById(int id);
 }

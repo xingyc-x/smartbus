@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    
+    <title>主界面</title>
+    
+    <!--框架必需-->
+    <link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+    <link rel="stylesheet" href="/libs/quickui/libs/skins/blue/style.css" type="text/css" id="theme" themeColor="blue" />
+    <link rel="stylesheet" href="/system/skins/basic_skin/skin/style.css"  type="text/css" id="skin" skinPath="../../system/skins/basic_skin/skin/" />
+
+    <script src="/libs/quickui/libs/js/jquery.js"></script>
+    <script src="/libs/quickui/libs/js/language/cn.js"></script>
+    <script src="/libs/quickui/libs/js/main.js"></script>
+
+    <!--引入弹窗组件-->
+    <script src="/libs/quickui/libs/js/popup/drag.js"></script>
+    <script src="/libs/quickui/libs/js/popup/dialog.js"></script>
+
+    <!--引入提示组件-->
+    <script src="/libs/quickui/libs/js/popup/toast.js"></script>
+    <script src="/libs/quickui/libs/js/popup/notice.js"></script>
+
+    <!--引入小铃铛-->
+    <link rel="stylesheet" type="text/css" href="/libs/quickui/libs/skins/blue/msgbox.css"/>
+    <script src="/libs/quickui/libs/js/popup/msgbox.js"></script>
+
+    <!--引入自定义的js与css-->
+    <link rel="stylesheet" href="main.css" type="text/css"/>
+</head>
+
+<body>
+<div id="mainFrame">
+    <!--头部与导航start-->
+    <div id="hbox">
+        <div class="hbox_content_win">
+            <div class="hbox_content clearfloat">
+                <div class="hbox_content_left clearfloat">
+                    <a href="javascript:;" target="_blank"></a>
+                    <span>威腾<b></b></span>
+                </div>
+                <div class="hbox_content_right clearfloat">
+                    <ul class="clearfloat hbox_content_right_menu">
+                        <li><i></i>监测系统</li>
+                        <li><i></i>设备管理</li>
+                        <li><i></i>用户管理</li>
+                        <li><i></i>事件管理</li>
+                        <li><i></i>项目管理</li>
+                    </ul>
+                    <a href="javascript:;" class="right_toggle" style="float:right">
+                        <span></span>
+                        <ul class="right_toggle_content">
+                            <li class="clearfloat right_toggle_fullscreen"><i></i>
+                                <div>全屏</div>
+                            </li>
+                            <li class="clearfloat right_toggle_lock_screen" onclick="lockScreen()"><i></i>修改个人资料</li>
+                            <li class="clearfloat right_toggle_sign_out" onclick="exitHandler()"><i></i>退出登录</li>
+                        </ul>
+                    </a>
+                    <a href="javascript:;" class="right_tip clearfloat" style="float:right"></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table_win">
+        <table width="100%" cellpadding="0" cellspacing="0" class="table_border0">
+            <tr>
+                <!--左侧区域start-->
+                <td id="hideCon" class="ver01 ali01">
+                    <div id="lbox">
+                        <div id="lbox_topcenter">
+                            <div class="bs_left_shrink clearfloat">
+                                <i class="active"></i>
+                            </div>
+                        </div>
+                        <div id="lbox_middlecenter" class="">
+                            <div id="bs_left" class="lbox_middlecenter_content">
+                                <!--左侧导航内容-->
+                                <!--收缩导航-->
+                            </div>
+                        </div>
+                        <div id="lbox_bottomcenter">
+
+                        </div>
+                    </div>
+                </td>
+                <!--左侧区域end-->
+
+                <!--右侧区域start-->
+                <td class="ali01 ver01" width="100%">
+                    <div id="rbox">
+                        <div id="rbox_topcenter">
+                            <div class="rbox_topcenter">
+                                <span>表单</span>
+                            </div>
+                        </div>
+                        <div id="rbox_middlecenter">
+                            <div id="bs_right">
+                                <IFRAME style="box-sizing: border-box; background: white;" height="100%" width="100%"
+                                        frameBorder=0 id=frmright name=frmright src="/system/monitor/grid-map.html"
+                                        allowTransparency="true"></IFRAME>
+                            </div>
+                        </div>
+                        <div id="rbox_bottomcenter">
+
+                        </div>
+                    </div>
+                </td>
+                <!--右侧区域end-->
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+
+<script src="nav.js"></script>
+<script src="main.js"></script>
+</html>

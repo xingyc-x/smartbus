@@ -1,6 +1,7 @@
 package com.pcis.smartbus.ucenter.service.impl;
 
 import com.pcis.smartbus.db.dao.SmartbusUserMapper;
+import com.pcis.smartbus.db.dao.UserManualMapper;
 import com.pcis.smartbus.db.domain.SmartbusUser;
 import com.pcis.smartbus.ucenter.service.UserService;
 
@@ -23,22 +24,25 @@ import java.util.Random;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private SqlSession session;
+    //private SqlSession session;
+    @Autowired
     private SmartbusUserMapper smartbusUserMapper;
-    private Logger logger;
+    @Autowired
+    private UserManualMapper userManualMapper;
+    private Logger logger= Logger.getLogger(UserServiceImpl.class);
 
-    public UserServiceImpl(){
-        try {
-            String resource = "mybatis-config.xml";
-            InputStream inputStream = Resources.getResourceAsStream(resource);
-            SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-            session = sqlSessionFactory.openSession();
-            smartbusUserMapper = session.getMapper(SmartbusUserMapper.class);
-            logger = Logger.getLogger(UserServiceImpl.class);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
+//    public UserServiceImpl(){
+//        try {
+//            String resource = "mybatis-config1.xml";
+//            InputStream inputStream = Resources.getResourceAsStream(resource);
+//            SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+//            session = sqlSessionFactory.openSession();
+//            smartbusUserMapper = session.getMapper(SmartbusUserMapper.class);
+//            logger = Logger.getLogger(UserServiceImpl.class);
+//        } catch (Exception e) {
+//            logger.error(e.getMessage());
+//        }
+//    }
 
     @Override
     public boolean register(String userName, String realName, String password, String phone, String email, int capacity, int companyId) throws Exception {
@@ -55,9 +59,24 @@ public class UserServiceImpl implements UserService {
         smartbusUser.setUpdated(localDateTime);
         try {
                 int result = smartbusUserMapper.insert(smartbusUser);
-                session.commit();
+                //session.commit();
 
             } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return true;
+    }
+
+    @Override
+    public boolean register(SmartbusUser smartbusUser) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        smartbusUser.setCreated(localDateTime);
+        smartbusUser.setUpdated(localDateTime);
+        try {
+            int result = smartbusUserMapper.insert(smartbusUser);
+            //session.commit();
+
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return true;
@@ -67,7 +86,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public SmartbusUser geUserByName(String userName) {
         try {
-            SmartbusUser smartbusUser = smartbusUserMapper.selectByUserName(userName);
+            System.out.println(userManualMapper);
+            SmartbusUser smartbusUser = userManualMapper.selectByUserName(userName);
             return smartbusUser;
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -77,43 +97,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public  int getUserNum() {
-        return smartbusUserMapper.getUserNum();
+        return userManualMapper.getUserNum();
     }
 
     @Override
-    public List<SmartbusUser> getAPageUser(int pageNo, int pageSize, String sortBy, String direction) {
-        if (pageNo == 0 ) {
-            return null;
-        }
-        int startNo = (pageNo - 1) * pageSize;
-        return smartbusUserMapper.getAPageUser(startNo, pageSize, sortBy, direction);
-//        if (direction.equals("desc")) {
-//            return smartbusUserMapper.getAPageUserDesc(startNo, pageSize, sortBy);
-//        } else if (direction.equals("asc")) {
-//            return smartbusUserMapper.getAPageUserAsc(startNo, pageSize, sortBy);
-//        }
-//        return null;
+    public List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction) {
+        return userManualMapper.getAPageUser(startNo, pageSize, sortBy, direction);
     }
 
     @Override
-    public  List<SmartbusUser> getAPageUserBySearch(int pageNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput) {
-        if (pageNo == 0 ) {
-            return null;
-        }
-        int startNo = (pageNo - 1) * pageSize;
-
+    public  List<SmartbusUser> getAPageUserBySearch(int startNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput) {
         switch (searchIf) {
             //查询类型为姓名
             case 1:
-                return smartbusUserMapper.getAPageUserByNameSearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
+                return userManualMapper.getAPageUserByNameSearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
 
             //查询类型为单位；
             case 2:
-                return smartbusUserMapper.getAPageUserByCompanySearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
+                return userManualMapper.getAPageUserByCompanySearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
 
                 //查询类型为权限等级
              case 3:
-                return smartbusUserMapper.getAPageUserByCapacity(startNo, pageSize, sortBy, direction, Integer.valueOf(searchInput));
+                return userManualMapper.getAPageUserByCapacity(startNo, pageSize, sortBy, direction, Integer.valueOf(searchInput));
             default:
                 return null;
 
@@ -125,18 +130,23 @@ public class UserServiceImpl implements UserService {
         switch (searchIf) {
             //查询类型为姓名
             case 1:
-                return smartbusUserMapper.getUserNumByNameSearch("%" + searchInput + "%");
+                return userManualMapper.getUserNumByNameSearch("%" + searchInput + "%");
 
             //查询类型为单位；
             case 2:
-                return smartbusUserMapper.getUserNumByCompanySearch("%" + searchInput + "%");
+                return userManualMapper.getUserNumByCompanySearch("%" + searchInput + "%");
 
             //查询类型为权限等级
             case 3:
-                return smartbusUserMapper.getUserNumByCapacity(Integer.valueOf(searchInput));
+                return userManualMapper.getUserNumByCapacity(Integer.valueOf(searchInput));
             default:
                 return 0;
         }
     }
+
+    public SmartbusUser getUserById(int id) {
+        return smartbusUserMapper.selectByPrimaryKey(id);
+    }
+
 
 }

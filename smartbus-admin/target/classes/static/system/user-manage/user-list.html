@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>用户管理</title>
+
+  <!--框架必需-->
+  <script src="/libs/quickui/libs/js/jquery.js"></script>
+  <script src="/libs/quickui/libs/js/language/cn.js"></script>
+  <script src="/libs/quickui/libs/js/framework.js"></script>
+  <link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+  <link rel="stylesheet" type="text/css" id="customSkin" />
+
+
+  <script src="/libs/quickui/libs/js/table/quiGrid.js"></script>
+  <script src="/libs/quickui/libs/js/form/form.js"></script>
+</head>
+
+<body>
+  <div class="page_content">
+    <div class="searchContent">
+      <button style="float: right;margin-bottom: 5px" onclick="addUser()">
+        <span class="icon_add">
+          添加用户
+        </span>
+      </button>
+      <form action="/api/user/getUserInfoBySearch" id="queryForm" method="post">
+        <table style="margin-bottom: 5px">
+          <tr>
+            <td width="70" class="ali03">
+              搜索类型：
+            </td>
+            <td>
+              <select id="searchIf" name="searchIf"  data=
+                '{"list":[{"value":"1","key":"姓名"},
+                {"value":"2","key":"单位"},
+                {"value":"3","key":"权限等级"}]}'>
+              </select>
+            </td>
+            <td>
+              <input type="text" placeholder ="请输入关键词" id="searchInput" name="searchInput" />
+            </td>
+            <td>
+              <button type="button" id="search" class="primary" onclick="searchHandler()">
+                <span class="icon_find">
+                  查询
+                </span>
+              </button>
+            </td>
+            <td>
+              <button type="button"  onclick="resetSearch()">
+                <span class="icon_clear">
+                  重置
+                </span>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+    <div id="mainGrid">
+    </div>
+  </div>  
+</body>
+  <script src="user_list.js"></script>
+</html>

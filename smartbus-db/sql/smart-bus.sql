@@ -28,12 +28,28 @@ DROP TABLE IF EXISTS company;
 CREATE TABLE company (
   id int NOT NULL AUTO_INCREMENT,
   company_name varchar(100) NOT NULL COMMENT '公司名称',
+  short_name varchar(50) COMMENT '公司简称',
   company_info varchar(300) COMMENT '公司简介',
+  img_path varchar(200) COMMENT '公司的相关图片存储位置',
   PRIMARY KEY (id),
   UNIQUE KEY `company_name` (`company_name`) USING BTREE,
   UNIQUE KEY `id` (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='公司表';
 
+DROP TABLE IF EXISTS project;
+CREATE TABLE project
+(
+`id` int NOT NULL AUTO_INCREMENT,
+`order` varchar(255) NOT NULL COMMENT '项目编号',
+`company_id` int NOT NULL,
+`location` varchar(500),
+`introduction` varchar(1000),
+`create_time` datetime NOT NULL,
+PRIMARY KEY (id),
+UNIQUE KEY `id` (`id`) USING BTREE,
+KEY `company_id` (`company_id`) USING BTREE,
+UNIQUE KEY `order` (`order`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='项目表';
 
 
 

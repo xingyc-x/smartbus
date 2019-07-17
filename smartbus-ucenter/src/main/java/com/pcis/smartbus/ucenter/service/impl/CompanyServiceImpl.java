@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.smartcardio.CommandAPDU;
@@ -16,23 +17,25 @@ import java.io.InputStream;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
-    private SqlSession session;
-    private Logger logger;
+    //private SqlSession session;
+    private Logger logger = Logger.getLogger(UserServiceImpl.class);
 
-    public CompanyServiceImpl(){
-        try {
-            String resource = "mybatis-config.xml";
-            InputStream inputStream = Resources.getResourceAsStream(resource);
-            SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-            session = sqlSessionFactory.openSession();
-            logger = Logger.getLogger(UserServiceImpl.class);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-    }
+    @Autowired
+    private CompanyMapper companyMapper;
+
+//    public CompanyServiceImpl(){
+//        try {
+//            String resource = "mybatis-config1.xml";
+//            InputStream inputStream = Resources.getResourceAsStream(resource);
+//            SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+//            session = sqlSessionFactory.openSession();
+//            logger = Logger.getLogger(UserServiceImpl.class);
+//        } catch (Exception e) {
+//            logger.error(e.getMessage());
+//        }
+//    }
 
     public String getCompanyName(int id) {
-        CompanyMapper companyMapper = session.getMapper(CompanyMapper.class);
         Company company = companyMapper.selectByPrimaryKey(id);
         if (company != null) {
             return company.getCompanyName();
@@ -40,6 +43,26 @@ public class CompanyServiceImpl implements CompanyService {
             return "null";
         }
 
+    }
+
+    @Override
+    public boolean addCompany(String name, String shortName, String imgPath, String introduction) {
+        Company company = new Company();
+        company.setCompanyName(name);
+        company.setShortName(shortName);
+        company.setImgPath(imgPath);
+        company.setCompanyInfo(introduction);
+        return addCompany(company);
+    }
+
+    @Override
+    public boolean addCompany(Company company) {
+        //CompanyMapper companyMapper = session.getMapper(CompanyMapper.class);
+        int num = companyMapper.insert(company);
+        if (num > 0) {
+            return true;
+        }
+        return false;
     }
 
 

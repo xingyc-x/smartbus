@@ -125,25 +125,4 @@ public interface SmartbusUserMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(SmartbusUser record);
-
-    //This is wrote by hand.
-    SmartbusUser selectByUserName(String userName);
-
-    Integer getUserNum();
-
-    List<SmartbusUser> getAPageUserDesc(int startNo, int pageSize, String sortBy);
-    List<SmartbusUser> getAPageUserAsc(int startNo, int pageSize, String sortBy);
-    List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction);
-
-    List<SmartbusUser> getAPageUserByNameSearch(int startNo, int pageSize, String sortBy, String direction, String searchContent);
-    List<SmartbusUser> getAPageUserByCapacity(int startNo, int pageSize, String sortBy, String direction, int capacity);
-    List<SmartbusUser> getAPageUserByCompanySearch(int startNo, int pageSize, String sortBy, String direction, String searchContent);
-
-    Integer getUserNumByNameSearch(String searchContent);
-    Integer getUserNumByCapacity(int capacity);
-    Integer getUserNumByCompanySearch(String searchContent);
-
-
-
-
 }

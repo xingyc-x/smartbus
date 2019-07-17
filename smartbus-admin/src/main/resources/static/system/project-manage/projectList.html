@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>项目管理</title>
+	<!--框架必需-->
+	<script src="/libs/quickui/libs/js/jquery.js"></script>
+	<script src="/libs/quickui/libs/js/language/cn.js"></script>
+	<script src="/libs/quickui/libs/js/framework.js"></script>
+	<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+	<link rel="stylesheet" type="text/css" id="customSkin" />
+	<!--框架必需end-->
+
+	<!--数据表格start-->
+	<script src="/libs/quickui/libs/js/table/quiGrid.js" type="text/javascript"></script>
+	<!--数据表格end-->
+
+	<!--分页start-->
+	<script type="text/javascript" src="/libs/quickui/libs/js/nav/pageNumber.js"></script>
+	<!--分页end-->
+
+	<!--表单异步提交start-->
+	<script src="/libs/quickui/libs/js/form/form.js" type="text/javascript"></script>
+	<!--表单异步提交end-->
+
+	<!-- 表单验证start -->
+	<script src="/libs/quickui/libs/js/form/validationRule.js" type="text/javascript"></script>
+	<script src="/libs/quickui/libs/js/form/validation.js" type="text/javascript"></script>
+	<!-- 表单验证end -->
+
+	<script type="text/javascript"  src="getUrlParam.js"></script>
+
+</head>
+<body>
+
+<div class="page_content">
+	<div class="searchContent">
+		<button  style="float: right;margin-bottom: 5px" onclick="addProject()"><span class="icon_add">添加项目</span></button>
+		<form action="/quickui/getProjectsOfPager.action" id="proSearchForm" method="post">
+			<table style="margin-bottom: 5px">
+				<tr>
+					<td width="70" class="ali03">搜索类型：</td>
+					<td>
+						<select id="searchIf" name="searchIf"  data='{"list":[{"value":"1","key":"项目编号"},{"value":"2","key":"客户公司"}]}'>
+						</select>
+					</td>
+					<td>
+						<input type="text" placeholder ="请输入关键词" id="searchInput" name="searchInput" />
+					</td>
+					<td><button type="button" id="search" class="primary" onclick="searchHandler()"><span class="icon_find">查询</span></button></td>
+					<td><button type="button"  onclick="resetSearch()"><span class="icon_clear">重置</span></button></td>
+				</tr>
+			</table>
+		</form>
+
+	</div>
+	<div id="maingrid"></div>
+</div>
+
+<script type="text/javascript">
+	var testData={"form.paginate.pageNo":1,"form.paginate.totalRows":8,"rows":[
+			{"order":778,"province":"江苏省","city":"南京市","county":"玄武区","location":"东南大学四牌楼校区","lng":118.800122,"lat":32.060705,"device_num":17},
+			{"order":28,"province":"江苏省","city":"南京市","county":"江宁区","location":"东南大学九龙湖校区","lng":118.826391,"lat":31.893828,"device_num":17},
+			{"order":123,"province":"浙江省","city":"杭州市","county":"西湖区","location":"浙江大学玉泉校区","lng":120.129435,"lat":30.270073,"device_num":17}
+		]};
+	//数据表格使用
+	var grid = null;
+	function initComplete(){
+		var sysUsers = JSON.parse(sessionStorage.getItem('sysUser'));
+		grid = $("#maingrid").quiGrid({
+			columns: [
+				{ display: '项目编号', name: 'order', align: 'left',  width:"25%"} ,
+				{ display: '客户公司', name: 'company', align: 'left',  width:"25%"} ,
+				{ display: '项目地点', name: 'location', align: 'left',  width:"25%"} ,
+				{ display: '项目创建时间', name: 'create_time', align: 'left',  width:"25%"} ,
+				{ display: '操作', isAllowHide: false, align: 'left', width: 180,
+					render: function (rowdata, rowindex, value, column){
+						return '<div class="grid_opp_container">'
+								+ '<span class="grid_opp_view" onclick="onViewProjectDetail(\'' + rowdata.order + '\')">查看</span>'
+								+ '<span class="grid_opp_edit" onclick="onEiditProject(\'' + rowdata.order + '\')">修改</span>'
+								+ '<span class="grid_opp_delete" onclick="onDeleteProject(\'' + rowdata.order + '\')">删除</span>'
+								+ '</div>';
+					}
+				}
+			],
+			<!--render用来将该列渲染为自定义的html元素, dataAction:'local',数据分页方式，默认为server；sortName指定初始时排序的列 rownumbers指定是否显示行号,usePager: true表示分页  -->
+			<!--删除data，添加url指定数据来源url: 'projectView.html?sysUserId='+ sysUsers, data:testData-->
+			data:testData,  sortName: 'order',rownumbers:true,usePager: true,
+			height: '100%', width:"100%",heightDiff:-40,percentWidthMode:true,rowNumberMemory:true
+		});
+		//监听查询框的enter事件
+		$("#searchInput").keydown(function(event){
+			if(event.keyCode == 13){
+				searchHandler();
+			}
+		})
+
+	}
+
+	//查询
+	function searchHandler(){
+		alert(1);
+		//注意此处array包括两个数组元素，第一个为搜索类型，第二个为搜索关键词
+		var query = $("#proSearchForm").formToArray();//采集表单数据到json数组
+		grid.setOptions({ params : query});////自定义条件查询,增加参数，必须是json
+		grid.setNewPage(1);//页号重置为1
+		grid.loadData();//加载数据
+	}
+
+	//重置查询
+	function resetSearch(){
+		$("#proSearchForm")[0].reset();
+		$('#search').click();//无条件信息查询，即显示所有数据
+	}
+
+	//刷新表格数据并重置排序和页数
+	function refresh(Update){
+		if(!Update){
+			//重置排序
+			grid.options.sortName='order';//表格排序字段名
+			grid.options.sortOrder="desc";//排序顺序,降序
+			//页号重置为1
+			grid.setNewPage(1);
+
+		}
+		grid.loadData();
+	}
+
+	//当前登录用户的json数据
+	var sysUsers = JSON.parse(sessionStorage.getItem('sysUser'));
+	//添加项目
+	function addProject() {
+		//验证当前用户的权限
+		$.post("/quickui/projectAction.do?method=preUpdateAjax", {"sysUserId": sysUsers.userId},
+				function (result) {
+					if (!result) {
+						top.Toast("showErrorToast", "您没有该权限！");
+					} else {
+						var diag = new top.Dialog();
+						diag.ID = "a1";
+						diag.Title = "添加项目信息";
+						diag.URL = "../../html/projectAdd.html";
+						diag.Width = 800;
+						diag.Height = 600;
+						diag.OkButtonText = "保存并新建项目";
+						//顺序很重要，diag.show()之前添加确定按钮事件，show之后添加新按钮
+						diag.OKEvent = function () {
+							diag.innerFrame.contentWindow.submitHandler(0);
+						};
+						diag.show();
+						diag.addButton("next", " 保 存 ", function () {
+							diag.innerFrame.contentWindow.submitHandler(1);
+						});
+					}
+				}, "json");
+
+
+
+	}
+
+
+	//修改项目信息
+	function onEiditProject(roworder){
+		var diag = new top.Dialog();
+		diag.ID = "a2";
+		diag.Title = "修改用户信息";
+		diag.URL = "../../html/projectEdit.html?order=" + roworder;
+		diag.Width = 800;
+		diag.Height = 600;
+		diag.OkButtonText = "保 存";
+		//顺序很重要，diag.show()之前添加确定按钮事件，show之后添加新按钮
+		diag.OKEvent = function() {
+			diag.innerFrame.contentWindow.submitHandler();
+		};
+		diag.show();
+
+	}
+
+	function onViewProjectDetail(roworder){
+		var diag = new top.Dialog();
+		diag.Title = "详细信息";
+		//diag.URL = "javascript:void(document.write('点击确定按钮'))";
+		diag.URL = "../../html/projectDetail.html?order="+ roworder;
+		diag.Width = 800;
+		diag.Height = 400;
+		diag.show();
+
+	}
+
+
+	function onDeleteProject(roworder){
+		//验证当前用户的权限
+		$.post("/quickui/projectAction.do?method=preUpdateAjax", {"sysUserId": sysUsers.userId},
+				function (result) {
+					if (!result) {
+						top.Toast("showErrorToast", "您没有该权限！");
+					} else {
+						top.Dialog.confirm("确定要删除该记录吗？",function(){
+							//删除记录
+							$.post("/quickui/proAction.do?method=deleteProject",
+									{"order":roworder},
+									function(data){
+										handleResult(data);
+									},"json");
+							//刷新表格
+							grid.loadData();
+						});
+					}
+				}, "json");
+
+
+	}
+
+	//删除后的提示
+	function handleResult(data){
+		if(data == 1){
+			top.Toast("showSuccessToast", "删除成功！");
+		}else{
+			top.Toast("showErrorToast", "删除失败！");
+		}
+	}
+
+
+
+</script>
+</body>
+</html>

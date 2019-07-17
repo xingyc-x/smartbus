@@ -1,0 +1,27 @@
+body {
+    width: 100% !important;
+    margin: 0;
+    padding: 0;
+}
+
+#hbox {
+    height: 85px;
+}
+
+.table_win {
+    width: 98%;
+}
+.hbox_content_right_colorbox span.blue_box {
+    background-color: #2DA9FA;
+}
+.hbox_content_right_colorbox span.green_box {
+    background-color: #1fc695;
+}
+
+.hbox_content_right_colorbox span.red_box {
+    background-color: #74D6DD;
+}
+
+.hbox_content_left a {
+    background: url(/images/ge.png) no-repeat 90% center;
+}

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset = utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <title>地图展示</title>
+    
+	<!--框架必需-->
+	<script src="/libs/quickui/libs/js/jquery.js"></script>
+	<script src="/libs/quickui/libs/js/language/cn.js"></script>
+	<script src="/libs/quickui/libs/js/framework.js"></script>
+	<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+	<link rel="stylesheet" type="text/css" id="customSkin" />
+
+	<!--数据表格-->
+	<script src="/libs/quickui/libs/js/table/quiGrid.js"></script>
+    
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+        /*.anchorBL{ display:none;}  //去除左下角logo*/
+	</style>
+    
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=AmsZRaFKFstaqbY7hn6mLICFpgvtjMw1"></script>
+</head>
+
+<body>
+	<div id="leftContent" style="width:25%;float:left;overflow: auto;">
+		<div id="grid"></div>
+	</div>
+	<div id="allmap" style="width:75%;float:left;overflow: auto;"></div>
+</body>
+</html>
+
+<script type="text/javascript">
+	var testData={"form.paginate.pageNo":1,"form.paginate.totalRows":8,"rows":[
+		{"id":778,"province":"江苏省","city":"南京市","country":"玄武区","name":"东南大学四牌楼校区","lng":118.800122,"lat":32.060705,"remarks":"这是东南大学母线监测单位"},
+		{"id":28,"province":"江苏省","city":"南京市","country":"江宁区","name":"东南大学九龙湖校区","lng":118.826391,"lat":31.893828,"remarks":"这是九龙湖母线监测单位"},
+		{"id":123,"province":"浙江省","city":"杭州市","country":"西湖区","name":"浙江大学玉泉校区","lng":120.129435,"lat":30.270073,"remarks":"这是玉泉母线监测单位"}
+		]};
+
+	// 百度地图API功能
+	var map = new BMap.Map("allmap", {enableMapClick:false});    // 创建Map实例
+	map.centerAndZoom("南京", 7);  // 初始化地图,设置中心点坐标和地图级别
+	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+
+		// 编写自定义函数,创建标注
+		function addMarker(point){
+		  var marker = new BMap.Marker(point);
+		  map.addOverlay(marker);
+		  marker.addEventListener("click",onclickmaker);
+		}
+		var projects = testData.rows;
+	    $.each(projects, function(idx, obj) {
+	    	var point = new BMap.Point(obj.lng,obj.lat);
+	    	//console.log(point);
+			addMarker(point);
+	    });
+	    
+	    //地图标注点点击跳转页面
+	    function onclickmaker(e){
+	    	var point = e.target.getPosition();
+	    	var projects = testData["rows"];
+	    	//project是一个单元素Array
+	    	var project = projects.filter(p => p.lng == point.lng);
+
+	    	//还要存入session，为2D监测页面服务
+	    	sessionStorage.setItem('project_id', project[0].id);
+	    	window.location.href='grid-card.html?project_id='+project[0].id;
+			//同组切换
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(0).removeClass("active");
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(1).addClass("active"); 
+	    }
+	    
+	    //地图加载事件，根据地图中点的数量更新左侧列表
+	    map.addEventListener("tilesloaded",function(){
+	    	var grid_data = {"form.paginate.pageNo":1,"form.paginate.totalRows":8};
+	    	var rows = [];
+	    	var bs = map.getBounds();   //获取可视区域
+	    	var bssw = bs.getSouthWest();   //可视区域左下角
+	    	var bsne = bs.getNorthEast();   //可视区域右上角
+	    	$.each(projects, function(idx, obj) {
+	    		if(bssw.lng<obj.lng && obj.lng<bsne.lng && bssw.lat<obj.lat &&obj.lat<bsne.lat){
+	    			rows.push(JSON.parse(JSON.stringify(obj)));
+	    			//console.log(project);
+	    		}			
+		    });
+	    	grid_data.rows = rows;
+	    	//console.log(rows);
+			//刷新表格
+			g.loadData(grid_data);
+	    	//top.Toast("showNoticeToast", JSON.stringify(grid_data));
+	    });
+	
+	    //数据表格使用
+        var g;
+		function initComplete(){
+			 g = $("#grid").quiGrid({
+                columns: [ 
+                	{ display: '地区', name: 'province',  align: 'center', width: 60 },
+	                { display: '名称', name: 'name',  align: 'center', width: "100%" },
+                  	{ display: '操作', isAllowHide: false, align: 'left', width: 60,
+                        render: function (rowdata, rowindex, value, column){
+                        return '<div class="grid_opp_container">'
+                                   + '<span class="grid_opp_view" style="position: relative;top:-12px"onclick="onView(' + rowdata.id + ')">查看</span>'
+                                   + '</div>';
+                     }
+                }
+                ], data:testData, rownumbers:true,percentWidthMode:true,rowNumberMemory:true,usePager: false,
+                height: '100%', width:"100%"
+            });
+		};
+		
+	    function onView(rowid){
+	    	window.location.href='grid-card.html?project_id='+rowid;
+	    	//还要存入session，为2D监测页面服务
+	    	sessionStorage.setItem('project_id', rowid);
+			//同组切换
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(0).removeClass("active");
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(1).addClass("active"); 
+	    };
+	    	
+</script>

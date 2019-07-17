@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>新增用户</title>
+
+	<!--框架必需-->
+	<script src="/libs/quickui/libs/js/jquery.js"></script>
+	<script src="/libs/quickui/libs/js/language/cn.js"></script>
+	<script src="/libs/quickui/libs/js/framework.js"></script>
+	<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+	<link rel="stylesheet" type="text/css" id="customSkin" />
+
+	<!-- 日期选择框 
+	<script type="text/javascript" src="/libs/quickui/libs/js/form/datePicker/WdatePicker.js"></script>
+  -->
+
+	<!-- 树组件start -->
+	<script type="text/javascript" src="/libs/quickui/libs/js/tree/ztree/ztree.js"></script>
+	<link type="text/css" rel="stylesheet" href="/libs/quickui/libs/js/tree/ztree/ztree.css"></link>
+
+	<!-- 树形下拉框start -->
+	<script type="text/javascript" src="/libs/quickui/libs/js/form/selectTree.js"></script>
+
+	<!-- 数字步进器start -->
+	<script type="text/javascript" src="/libs/quickui/libs/js/form/stepper.js"></script>
+
+	<script src="/libs/quickui/libs/js/form/form.js" type="text/javascript"></script>
+	<!-- 表单验证start -->
+	<script src="/libs/quickui/libs/js/form/validationRule.js" type="text/javascript"></script>
+	<script src="/libs/quickui/libs/js/form/validation.js" type="text/javascript"></script>
+
+	<!-- 表单异步提交start -->
+	<script src="/libs/quickui/libs/js/form/form.js" type="text/javascript"></script>
+
+</head>
+<style>
+	.formLayoutContent{
+		border: 0!important;
+	}
+</style>
+
+<body>
+  <div class="page_content">
+    <div class="infoCard">
+      <div class="title">
+        <span>信息添加</span>
+      </div>
+      <div class="content">
+        <table cellpadding="0" cellspacing="0" width="100%">
+          <tr>
+            <td width="210" class="ver01">
+              <img src="/libs/quickui/libs/images/demo/demo5.jpg"/>
+            </td>
+            <td width="100%" class="ver01">
+              <form id="addFormId" action="/api/user/register" method="post" target="frmright" showOnMouseOver="false">
+                <div class="formLayout">
+                  <div class="formLayoutContent">
+                    <table class="formStyle">
+                      <!-- 需要添加值！！！！！-->
+                      <input type="hidden" id ="sysUserId" name="sysUserId" />
+                      <tr>
+                        <td width="110" class="ali03">用户名：</td>
+                        <td width="200">
+                          <!-- 当文本失去焦点时，会自动触发验证，将路径+ validateValue=输入值 拼成url&validateValue=root传到后台,传回false输出提示语-->
+                          <input type="text" id="userName" name="userLoginName" value="" fillType="textinput" class="validate[required,custom[noSpecialCaracters],ajax[/api/user/validateUserName|* 用户名已存在!]]" />
+                        </td>
+                        <td width="15">
+                          <span class="star">*</span>
+                        </td>
+                        <td>
+                          <div class="validation_info">请输入英文或数字</div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="ali03">密码：</td>
+                        <td><input type="password" checkStrength="true" name="userPassword" value="" id="pwd" class="validate[required,length[6,11],passwordStrength] "/> </td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+                        <td><div class="validation_info">请输入6-11位的数字</div></td>
+                      </tr>
+
+                      <tr>
+                        <td class="ali03">密码确认：</td>
+                        <td><input type="password" class="validate[required,confirm[pwd]] float_left" value=""/></td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+                        <td><div class="validation_info"></div></td>
+                      </tr>
+
+                      <tr>
+                        <td class="ali03">姓名：</td>
+                        <td><input type="text" id="trueName" name="userName" value="" fillType="textinput" class="validate[required,custom[chinese],length[0,10]] float_left"/></td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+                        <td><div class="validation_info">请输入中文，10字以内</div></td>
+                      </tr>
+                      <!--
+                      <tr>
+                        <td class="ali03">性别：</td>
+                        <td colspan="3">
+                          <input type="radio" id="radio-1" name="userSex" value="1" fillType="radio"/><label for="radio-1" class="hand">男</label>
+                          <input type="radio" id="radio-2" name="userSex" value="0" fillType="radio" checked="checked"/><label for="radio-2" class="hand">女</label>
+                        </td>
+                      </tr>
+                      -->
+
+                      <tr>
+                        <td class="ali03">所属单位：</td>
+                        <td width="200">
+                          <input type="text" id="userOrganization" name="userOrganization" value="" fillType="textinput" class="validate[required]"/>
+                        </td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+                        <td><div class="validation_info"></div></td>
+                      </tr>
+
+                      <tr>
+                        <td class="ali03">电话号码：</td>
+                        <td ><input type="text" id="userTel" name="userTel" value="" class="validate[required,custom[mobilephone]] "/></td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+                        <td><div class="validation_info"></div></td>
+                      </tr>
+
+                      <tr>
+                        <td class="ali03">邮箱：</td>
+                        <td ><input type="text" id="userEmail" name="userEmail" value="" class="validate[required,custom[email]] "/></td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+                        <td><div class="validation_info"></div></td>
+                      </tr>
+
+
+                      <tr>
+                        <td class="ali03">权限等级：</td>
+                        <td>
+                          <select id="userLevel" name="userLevel" class="validate[required]" prompt ="请选择"   data='{"list":[{"value":"1","key":"威腾管理人员"},{"value":"2","key":"区域业务员"},{"value":"3","key":"客户公司管理人员"},{"value":"4","key":"客户公司运维人员"}]}'>
+                          </select>
+                        </td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+                        <td><div class="validation_info"></div></td>
+                      </tr>
+
+
+                      <tr>
+                        <td class="ali03">涉及项目：</td>
+                        <td ><div class="selectTree" id="selectTree1" name="userProject" multiMode="true" noGroup="true" keepDefaultStyle="true"></div></td>
+                      </tr>
+
+                      <!--
+                      <tr>
+                        <td class="ali03">入职时间：</td>
+                        <td colspan="3"><input  type="text" name="userEmployTime" value="" fillType="date" class="date"/></td>
+
+                      </tr>
+                      -->
+                      <!--
+                      <tr>
+                        <td class="ali03">学历：</td>
+                        <td colspan="3"><select selectedValue="" name="userEducation"  prompt ="请选择" data='{"list":[{"value":"1","key":"大专"},{"value":"2","key":"本科"},{"value":"3","key":"硕士"},{"value":"4","key":"博士"}]}'></select></td>
+
+                      </tr> -->
+                      <!--
+                      <tr>
+                        <td class="ali03">备注信息：</td>
+                        <td colspan="2"><textarea  name="userExtraInfo" style="width:100%;"></textarea></td>
+                      </tr>
+                      -->
+                    </table>
+
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+  <script src="add_user.js"></script>
+</html>
