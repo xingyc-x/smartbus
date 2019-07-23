@@ -11,5 +11,25 @@
 
 <artifactId>smartbus-project-center</artifactId>
 <packaging>jar</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>com.pcis</groupId>
+            <artifactId>smartbus-db</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.pcis</groupId>
+            <artifactId>smartbus-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.pcis</groupId>
+            <artifactId>smartbus-ucenter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>

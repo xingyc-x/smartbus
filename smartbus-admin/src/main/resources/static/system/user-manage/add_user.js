@@ -1,4 +1,5 @@
 var closeWinStatus = 0;
+var WEITEN_ID = 1;
 function initComplete(){
     //这个函数还是会自动执行的
     //先干掉，之后再说
@@ -6,12 +7,26 @@ function initComplete(){
     //$('#sysUserId').val(sysUsers.userId);
 
     //获取远程数据
-    $.get("/api/user/getAvailableProject",function(result){
+    $.get("/api/project/getAvailableProject", function(result){
         //赋给data属性
-        $("#selectTree1").data("data",result);
+        $("#userProject").data("data",result);
         //刷新树形下拉框
-        $("#selectTree1").render();
+        $("#userProject").render();
     },"json");
+    
+    $.get("/api/user/getAvailableCompany",function(result){
+        //赋给data属性
+        $("#userOrganization").data("data",result);
+        //刷新树形下拉框
+        $("#userOrganization").render();
+    },"json");
+
+    //赋给data属性
+    $("#alarmWay").data("data",{"treeNodes":[
+        {"id":"1","name":"邮件","parentId":"0"},
+        {"id":"2","name":"短信","parentId":"0"}]});
+    //刷新树形下拉框
+    $("#alarmWay").render();
 
     //注册表单提交完成后的回调函数
     $('#addFormId').submit(function(){
@@ -23,11 +38,15 @@ function initComplete(){
                 success: function(responseText, statusText, xhr, $form){
                     //成功返回字符串“1”，好像可以自动转成整数型，不知道其他浏览器是否会有兼容性问题
                     //alert(responseText);
-                    if(!responseText){
-                        top.Toast("showErrorToast", "添加用户失败！");
+                    //alert(responseText.status);
+                    var response = eval("(" + responseText + ")");
+                   // alert(responseText.status);
+                    //alert(responseText);
+                    if(!response.status){
+                        top.Toast("showErrorToast", response.info);
                     }
                     else{
-                        top.Toast("showSuccessToast","添加用户成功！");
+                        top.Toast("showSuccessToast",response.info);
                         //0 不关界面， 1 关界面
                         if(closeWinStatus == 1){
                             saveCloseWinHandler();
@@ -55,7 +74,14 @@ function submitHandler(closeWin){
     //判断表单的客户端验证是否通过
     var valid = $('#addFormId').validationEngine({returnIsValid: true, showOnMouseOver:false});
     if(valid){
-        $('#addFormId').submit()
+        //威腾公司管理员但不是威腾公司的人，不允许注册,这里要求威腾公司的id必须为1
+        //selectTree2 就是 userOrganization 的那个
+        if ($('#userLevel').val() < 3 && $("#userOrganization").attr("relValue") != WEITEN_ID) {
+            //alert($("#selectTree2").attr("relValue"));
+            top.Toast("showErrorToast", "非威腾公司人员不能注册为威腾公司管理员与业务员！");
+        } else {
+            $('#addFormId').submit()
+        }
     }
     //阻止表单默认提交事件
     return false;

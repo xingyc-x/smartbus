@@ -7,4 +7,6 @@ import java.util.List;
 public interface CompanyManualMapper {
     //Here is wrote by hand.
     List<Company> getCompanyIdBySearch(String searchContent);
+
+    List<Company> getAllCompany();
 }

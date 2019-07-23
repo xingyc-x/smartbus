@@ -13,4 +13,7 @@
     <select id= "getCompanyIdBySearch" resultMap= "BaseResultMap">
         SELECT id FROM company WHERE company_name LIKE #{searchContent};
     </select>
+    <select id="getAllCompany" resultType="com.pcis.smartbus.db.domain.Company">
+        SELECT * FROM company;
+    </select>
 </mapper>

@@ -34,7 +34,7 @@ function initComplete(){
         //rownumbers指定是否显示行号,
         //usePager: true表示分页   
         
-        url: '/api/user/getUserInfo',  
+        url: '/api/user/getUserInfo2',  
         sortName: 'userId',
         rownumbers:true,
         usePager: true,
@@ -86,7 +86,6 @@ function refresh(Update){
 //var sysUsers = JSON.parse(sessionStorage.getItem('sysUser'));
 
 //添加用户
-//已经验证了哦
 function addUser(){
     var diag = new top.Dialog();
     diag.Title = "添加用户信息";
@@ -108,21 +107,21 @@ function addUser(){
 
 //修改用户信息，需要添加当前登录用户信息!!!!!
 function onEditUser(rowId){
-    alert(rowId);
+    //alert(rowId);
     //验证当前用户的修改权限
     //能改自己和比自己权限低的
     $.post("/api/user/validateAuthority", {"userId": rowId},
         function(result){
-            alert(result);
+            //alert(result);
             if(!result){
                 top.Toast("showErrorToast", "您没有该权限！");
             } else{
-                alert(result + "ok");
+                //alert(result + "ok");
                 
                 sessionStorage.setItem("operatedUserId", rowId);
                 var diag = new top.Dialog();
                 diag.Title = "修改用户信息";
-                diag.URL = "/system/user-manage/dialog-user-detail-revise.html";
+                diag.URL = "/system/user-manage/dialog-revise-user.html";
                 diag.Width = 800;
                 diag.Height = 600;
                 diag.OkButtonText = "保 存";
@@ -139,8 +138,9 @@ function onEditUser(rowId){
 
 //查看用户信息
 function onViewUserDetail(rowId){
+    //alert("rowId:"+ rowId);
     //验证当前用户的权限
-    $.post("/quickui/userAction.do?method=preUpdateAjax",{"userId":rowId,"sysUserId":sysUsers.userId},
+    $.post("/api/user/validateAuthority",{"userId":rowId},
         function(result){
             if(!result){
                 top.Toast("showErrorToast", "您没有该权限！");
@@ -150,7 +150,8 @@ function onViewUserDetail(rowId){
                 var diag = new top.Dialog();
                 diag.Title = "详细信息";
                 //diag.URL = "javascript:void(document.write('点击确定按钮'))";
-                diag.URL = "../../html/dialog_content_user_detail.html?userId="+ rowId;
+                sessionStorage.setItem("operatedUserId", rowId);
+                diag.URL = "/system/user-manage/dialog-content-user-detail.html";
                 diag.Width = 800;
                 diag.Height = 600;
                 diag.show();
@@ -161,25 +162,36 @@ function onViewUserDetail(rowId){
 }
 
 
-function onDelete(rowid, rowidx){
-    top.Dialog.confirm("确定要删除该记录吗？",function(){
-        //删除记录
-        $.post("/quickui/userAction.do?method=deleteUser",
-            {"UserId":rowId,"sysUserId":sysUsers.userId},
-            function(data){
-                handleResult(data);
-            },"json");
-        //刷新表格
-        grid.loadData();
-    });
+function onDelete(rowId, rowidx){
+    $.post("/api/user/validateAuthority",{"userId":rowId},
+    function(result){
+        if(!result){
+            top.Toast("showErrorToast", "您没有该权限！");
+        } else{
+            top.Dialog.confirm("确定要删除该记录吗？",function(){
+                //alert("I want to delete somethings"+rowid);
+                //alert(rowidx);
+                //删除记录
+                $.post("/api/user/deleteUser",
+                    {"userId":rowId},
+                    function(data){
+                        handleResult(data);
+                    },"json");
+                //刷新表格
+               
+            });
+        }
+    } ,"json");
 }
 
 
 //删除后的提示
 function handleResult(data){
+    //alert("I realy want delete something");
     if(data == 1){
         top.Toast("showSuccessToast", "删除成功！");
     }else{
         top.Toast("showErrorToast", "删除失败！");
     }
+    grid.loadData();
 }

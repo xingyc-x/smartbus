@@ -79,7 +79,7 @@ public class GetUserTest {
                 String email = getRandomString(5);
                 int capacity = 1;
                 int companyId = 10;
-                boolean flag = userService.register(userName, realName, password, phone, email, capacity, companyId);
+                int flag = userService.register(userName, realName, password, phone, email, capacity, companyId);
             }
 
 
@@ -114,7 +114,7 @@ public class GetUserTest {
     @Test
     public void test4() throws Exception {
         SmartbusUser smartbusUser = userService.geUserByName("root");
-        JSONObject userInfo = userUtils.getResponseUserInfoJson(smartbusUser, false,false);
+        JSONObject userInfo = userUtils.getResponseUserInfoJson(smartbusUser, false,false, false);
         logger.info(String.valueOf(userInfo));
         logger.info(String.valueOf(companyService));
     }

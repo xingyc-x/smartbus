@@ -42,7 +42,7 @@ public class KeepSecretLoginFilter implements Filter {
 
         // 不带http://域名:端口的地址
         String uri = request.getRequestURI();
-        System.out.println("KeepSecretLoginFilter:" + uri);
+        //System.out.println("KeepSecretLoginFilter:" + uri);
         if (uri.equals(loginProcess)) {
             // 登录的请求，放行
             chain.doFilter(request, response);

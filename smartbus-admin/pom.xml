@@ -60,6 +60,11 @@
             <artifactId>smartbus-mq</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.pcis</groupId>
+            <artifactId>smartbus-project-center</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

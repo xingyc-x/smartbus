@@ -39,11 +39,11 @@ public class AddUserTest {
     @Test
     public void Test2() throws Exception {
         SmartbusUser smartbusUser = new SmartbusUser();
-        smartbusUser.setUserName("zhangsan");
+        smartbusUser.setUserName("zhangsan2");
         smartbusUser.setRealName("张三");
         smartbusUser.setPassword("password");
-        smartbusUser.setPhone("123");
-        smartbusUser.setEmail("123");
+        smartbusUser.setPhone("1233");
+        smartbusUser.setEmail("1233");
         smartbusUser.setCapacity(1);
         smartbusUser.setCompanyId(2);
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -51,5 +51,23 @@ public class AddUserTest {
         smartbusUser.setUpdated(localDateTime);
         smartbusUserMapper.insert(smartbusUser);
         System.out.println(smartbusUser);
+    }
+
+    @Test
+    public void Test10(){
+        String a = "";
+        a.split(",");
+        for(String s: a.split(",")){
+
+        }
+    }
+
+    @Test
+    public void Test11() {
+        SmartbusUser user = new SmartbusUser();
+        Boolean sign = addUserController.changeAlarmWay("2", user);
+        System.out.println(sign);
+        System.out.println(user);
+
     }
 }

@@ -23,4 +23,5 @@ public interface UserManualMapper {
     Integer getUserNumByNameSearch(String searchContent);
     Integer getUserNumByCapacity(int capacity);
     Integer getUserNumByCompanySearch(String searchContent);
+
 }

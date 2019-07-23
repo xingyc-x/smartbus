@@ -45,7 +45,7 @@ public class GuideLoginFilter implements Filter {
 
         // 不带http://域名:端口的地址
         String uri = request.getRequestURI();
-        System.out.println("GuideLoginFilter:" + uri);
+        //System.out.println("GuideLoginFilter:" + uri);
         if (request.getSession().getAttribute(Constant.USER_ID) != null) {
             //如果已经登录
             chain.doFilter(request, response);

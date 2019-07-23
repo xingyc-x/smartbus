@@ -33,16 +33,24 @@ function queryInfo() {
 
 function exitHandler() {
     top.Dialog.confirm("确定要退出系统吗", function () {
-        window.location.href = "../login/login.html";
+        window.location.href = "/login/login.html";
+        $.get("/api/user/loginOut", function(){});
     }, function () {
+       //如果取消，就执行这里
     });
 }
 
-function lockScreen() {
+function editMyInfo() {
     var diag = new top.Dialog();
     diag.Title = "修改用户信息";
-    diag.URL = "../user-manage/dialog_content_user_detail_revise.html";
+    sessionStorage.setItem("operatedUserId", sessionStorage.getItem("sysUserId"));
+    diag.URL = "/system/user-manage/dialog-revise-user.html";
     diag.Width = 800;
     diag.Height = 500;
+    diag.OkButtonText = "保 存";
+    //顺序很重要，diag.show()之前添加确定按钮事件，show之后添加新按钮
+    diag.OKEvent = function() {
+        diag.innerFrame.contentWindow.submitHandler();
+    };
     diag.show();
 }

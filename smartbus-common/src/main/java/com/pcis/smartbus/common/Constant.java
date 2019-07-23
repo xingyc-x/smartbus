@@ -11,4 +11,7 @@ public class Constant {
 
     public static final String PASS = "1";
     public static final String NO_PASS = "0";
+
+    public static final int ALARM_EMAIL = 1;
+    public static final int ALARM_SMS = 2;
 }

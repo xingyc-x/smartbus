@@ -59,8 +59,8 @@
                 <div class="formLayout">
                   <div class="formLayoutContent">
                     <table class="formStyle">
-                      <!-- 需要添加值！！！！！-->
-                      <input type="hidden" id ="sysUserId" name="sysUserId" />
+                      <!-- 后端可以判断sysUserId,这里无需提交表单-->
+                      <!--<input type="hidden" id ="sysUserId" name="sysUserId" /> -->
                       <tr>
                         <td width="110" class="ali03">用户名：</td>
                         <td width="200">
@@ -110,7 +110,15 @@
                         </td>
                       </tr>
                       -->
-
+                      <tr>
+                        <td class="ali03">所属单位：</td>
+                        <td ><div class="selectTree" id="userOrganization" name="userOrganization" multiMode="false" noGroup="true" keepDefaultStyle="true"></div></td>
+                        <td>
+                          <span class="star">*</span>
+                        </td>
+             
+                      </tr>
+                      <!--
                       <tr>
                         <td class="ali03">所属单位：</td>
                         <td width="200">
@@ -121,7 +129,7 @@
                         </td>
                         <td><div class="validation_info"></div></td>
                       </tr>
-
+                       -->
                       <tr>
                         <td class="ali03">电话号码：</td>
                         <td ><input type="text" id="userTel" name="userTel" value="" class="validate[required,custom[mobilephone]] "/></td>
@@ -156,9 +164,13 @@
 
                       <tr>
                         <td class="ali03">涉及项目：</td>
-                        <td ><div class="selectTree" id="selectTree1" name="userProject" multiMode="true" noGroup="true" keepDefaultStyle="true"></div></td>
+                        <td ><div class="selectTree" id="userProject" name="userProject" multiMode="true" noGroup="true" keepDefaultStyle="true"></div></td>
                       </tr>
 
+                      <tr>
+                        <td class="ali03">报警方式：</td>
+                        <td ><div class="selectTree" id="alarmWay" name="alarmWay" multiMode="true" noGroup="true" keepDefaultStyle="true"></div></td>
+                      </tr>
                       <!--
                       <tr>
                         <td class="ali03">入职时间：</td>

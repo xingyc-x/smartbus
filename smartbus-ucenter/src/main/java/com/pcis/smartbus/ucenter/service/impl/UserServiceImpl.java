@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.InputStream;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private SmartbusUserMapper smartbusUserMapper;
     @Autowired
     private UserManualMapper userManualMapper;
-    private Logger logger= Logger.getLogger(UserServiceImpl.class);
+    private Logger logger = Logger.getLogger(UserServiceImpl.class);
 
 //    public UserServiceImpl(){
 //        try {
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public boolean register(String userName, String realName, String password, String phone, String email, int capacity, int companyId) throws Exception {
+    public int register(String userName, String realName, String password, String phone, String email, int capacity, int companyId) throws Exception {
         SmartbusUser smartbusUser = new SmartbusUser();
         smartbusUser.setUserName(userName);
         smartbusUser.setRealName(realName);
@@ -59,34 +60,35 @@ public class UserServiceImpl implements UserService {
         smartbusUser.setUpdated(localDateTime);
         try {
                 int result = smartbusUserMapper.insert(smartbusUser);
-                //session.commit();
+                return result;
 
             } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return true;
+        return 0;
     }
 
     @Override
-    public boolean register(SmartbusUser smartbusUser) {
+    public int register(SmartbusUser smartbusUser) {
         LocalDateTime localDateTime = LocalDateTime.now();
         smartbusUser.setCreated(localDateTime);
         smartbusUser.setUpdated(localDateTime);
         try {
             int result = smartbusUserMapper.insert(smartbusUser);
+            return result;
             //session.commit();
 
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return true;
+        return 0;
     }
 
 
     @Override
     public SmartbusUser geUserByName(String userName) {
         try {
-            System.out.println(userManualMapper);
+            //System.out.println(userManualMapper);
             SmartbusUser smartbusUser = userManualMapper.selectByUserName(userName);
             return smartbusUser;
         } catch (Exception e) {
@@ -146,6 +148,17 @@ public class UserServiceImpl implements UserService {
 
     public SmartbusUser getUserById(int id) {
         return smartbusUserMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public boolean reviseUser(SmartbusUser user) {
+        SmartbusUser user1 = smartbusUserMapper.selectByPrimaryKey(user.getId());
+        user.setId(user1.getId());
+        user.setCreated(user1.getCreated());
+        LocalDateTime localDateTime = LocalDateTime.now();
+        user.setUpdated(localDateTime);
+        smartbusUserMapper.updateByPrimaryKey(user);
+        return true;
     }
 
 

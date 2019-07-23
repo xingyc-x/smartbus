@@ -1,5 +1,6 @@
 package com.pcis.smartbus.ucenter.service.impl;
 
+import com.pcis.smartbus.db.dao.CompanyManualMapper;
 import com.pcis.smartbus.db.dao.CompanyMapper;
 import com.pcis.smartbus.db.domain.Company;
 import com.pcis.smartbus.ucenter.service.CompanyService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.smartcardio.CommandAPDU;
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -23,6 +25,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Autowired
     private CompanyMapper companyMapper;
 
+    @Autowired
+    private CompanyManualMapper companyManualMapper;
 //    public CompanyServiceImpl(){
 //        try {
 //            String resource = "mybatis-config1.xml";
@@ -46,6 +50,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public Company getCompanyById(int id) {
+        return companyMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public boolean addCompany(String name, String shortName, String imgPath, String introduction) {
         Company company = new Company();
         company.setCompanyName(name);
@@ -63,6 +72,11 @@ public class CompanyServiceImpl implements CompanyService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Company> getAllCompany() {
+        return companyManualMapper.getAllCompany();
     }
 
 

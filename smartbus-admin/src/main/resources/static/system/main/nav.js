@@ -23,9 +23,9 @@ var sNodes=[
 	{ "id":"401", "parentId":"4", "name":"事件管理", "isParent": "true","icon": indexIcon,"backgroundPosition":"-178px -64px"},
 	{ "id":"2101", "parentId":"401", "name":"事件列表","url":"/system/event-manage/incidentList.html", "target":"frmright","icon": indexIcon,"backgroundPosition":"-191px -32px"},
 
-	{ "id":"5", "parentId":"0", "name":"项目管理","url":"/system/project-manage/projectList.html", "isParent": "true","icon": indexIcon,"backgroundPosition":"-139px -97px"},
+	{ "id":"5", "parentId":"0", "name":"项目管理","url":"/system/project-manage/project-list.html", "isParent": "true","icon": indexIcon,"backgroundPosition":"-139px -97px"},
 	{ "id":"501", "parentId":"5", "name":"项目管理","icon": indexIcon,"backgroundPosition":"-139px -97px"},
-	{ "id":"5101", "parentId":"501", "name":"项目列表","url":"/system/project-manage/projectList.html", "target":"frmright","icon": indexIcon,"backgroundPosition":"-191px -32px"},
+	{ "id":"5101", "parentId":"501", "name":"项目列表","url":"/system/project-manage/project-list.html", "target":"frmright","icon": indexIcon,"backgroundPosition":"-191px -32px"},
 
 ];
 

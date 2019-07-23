@@ -1,5 +1,6 @@
 package com.pcis.smartbus.ucenter.service.impl;
 
+import com.pcis.smartbus.db.dao.ProjectUserRelationManualMapper;
 import com.pcis.smartbus.db.dao.ProjectUserRelationMapper;
 import com.pcis.smartbus.db.dao.SmartbusUserMapper;
 import com.pcis.smartbus.db.domain.ProjectUserRelation;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 public class UserProjectRelationServiceImpl implements UserProjectRelationService {
@@ -21,6 +23,8 @@ public class UserProjectRelationServiceImpl implements UserProjectRelationServic
 
     @Autowired
     private ProjectUserRelationMapper projectUserRelationMapper;
+    @Autowired
+    private ProjectUserRelationManualMapper projectUserRelationManualMapper;
     private Logger logger =logger = Logger.getLogger(UserProjectRelationServiceImpl.class);
 
 //    public UserProjectRelationServiceImpl(){
@@ -50,6 +54,21 @@ public class UserProjectRelationServiceImpl implements UserProjectRelationServic
             return false;
         }
 
+    }
+
+    @Override
+    public List<ProjectUserRelation> selectByUserId(int userId) {
+        return projectUserRelationManualMapper.selectByUserId(userId);
+    }
+
+    @Override
+    public int deleteByUserId(int userId) {
+        return projectUserRelationManualMapper.deleteByUserId(userId);
+    }
+
+    @Override
+    public int deleteByProjectId(int projectId) {
+        return projectUserRelationManualMapper.deleteByProjectId(projectId);
     }
 
 }

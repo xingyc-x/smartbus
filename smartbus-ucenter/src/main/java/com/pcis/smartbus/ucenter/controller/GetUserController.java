@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.pcis.smartbus.common.Constant;
 import com.pcis.smartbus.db.domain.SmartbusUser;
 import com.pcis.smartbus.ucenter.utils.UserUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.pcis.smartbus.ucenter.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,8 @@ public class GetUserController {
     private UserService userService;
     @Autowired
     UserUtils userUtils;
+
+    private Logger logger = Logger.getLogger(GetUserController.class);
 
 
     private String changeSortLabel(String sort) {
@@ -69,7 +73,7 @@ public class GetUserController {
         if (smartbusUsers != null && smartbusUsers.size() != 0) {
             List<JSONObject> jsonObjects = new ArrayList<JSONObject>(smartbusUsers.size());
             for (SmartbusUser smartbusUser : smartbusUsers) {
-                JSONObject temp = userUtils.getResponseUserInfoJson(smartbusUser, false, false);
+                JSONObject temp = userUtils.getResponseUserInfoJson(smartbusUser, false, false, false);
                 jsonObjects.add(temp);
             }
             object.put("rows", jsonObjects);
@@ -113,6 +117,27 @@ public class GetUserController {
         int numUser = userService.getUserNumBySearch(searchIf, searchInput);
         return packToJson(pageNo, numUser, smartbusUsers);
 
+    }
+    @PostMapping(value = "api/user/getUserInfo2")
+    public String getUserInfo2(
+            @RequestParam("pager.pageNo")int pageNo,
+            @RequestParam("pager.pageSize")int pageSize,
+            @RequestParam("sort")String sort,
+            @RequestParam("direction")String direction,
+            HttpServletRequest request
+    ) {
+        int searchIf = 0;
+        String searchInput = "";
+        try {
+            searchIf = Integer.valueOf(request.getParameter("searchIf"));
+            searchInput = request.getParameter("searchInput");
+            //System.out.println(searchInput +"21"+ searchIf);
+            return getUserInfoBySearch(pageNo, pageSize, sort, direction,searchIf,searchInput);
+
+        } catch (Exception e) {
+            //logger.error(e.getMessage());
+            return getUserInfo(pageNo, pageSize, sort, direction);
+        }
     }
 
     @GetMapping(value = "api/user/getMyId")
