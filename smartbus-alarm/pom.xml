@@ -22,11 +22,7 @@
             <artifactId>spring-context-support</artifactId>
             <version>RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>RELEASE</version>
-        </dependency>
+ 
         <!-- 模板引擎 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
