@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>基本表格模板</title>
+    <!--框架必需-->
+    <script src="/libs/quickui/libs/js/jquery.js"></script>
+    <script src="/libs/quickui/libs/js/language/cn.js"></script>
+    <script src="/libs/quickui/libs/js/framework.js"></script>
+    <link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+    <link rel="stylesheet" type="text/css" id="customSkin" />
+
+<!--数据表格start-->
+<script src="/libs/quickui/libs/js/table/quiGrid.js" type="text/javascript"></script>
+<!--数据表格end-->
+
+<!--分页start-->
+<script type="text/javascript" src="/libs/quickui/libs/js/nav/pageNumber.js"></script>
+<!--分页end-->
+
+</head>
+<body>
+	<table >
+      <tr> 
+        <td width="70" class="ali03">关键词：</td>
+        <td><input type="text" id="IDAndAddress" placeholder="输入设备编号或位置" /></td>
+        <td><button onclick="searchDevicesByIDAndAddress()" ><span class="icon_find">查询</span></button></td>
+        <td><button onclick="cancelSearchDevices()"><span class="icon_clear">重置</span></button></td>    
+      </tr>
+    </table>
+
+     
+
+	<div class="page_content">
+		<div id="maingrid"></div>
+    </div>
+<div id="pageContent" style="height:35px;"></div>	
+<script type="text/javascript">
+	var testData={"form.paginate.pageNo":1,"form.paginate.totalRows":5,"rows":[
+		  {"device_id":"IBC0013 ","type":"IBC","address":"1F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC2334 ","type":"IBC","address":" 1F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC3434 ","type":"IBC","address":" 1F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC3457 ","type":"IBC","address":"3F ","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC2346 ","type":"IBC","address":" 1F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC5777 ","type":"IBC","address":" 1F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC7887 ","type":"IBC","address":" 2F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC6487 ","type":"IBC","address":"2F ","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC2566 ","type":"IBC","address":" 2F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC4256 ","type":"IBC","address":"4F ","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC6757 ","type":"IBC","address":" 4F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC4788 ","type":"IBC","address":"4F ","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC9700 ","type":"IBC","address":" 4F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC0678 ","type":"IBC","address":" 2F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC3254 ","type":"IBC","address":"4F ","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC5678 ","type":"IBC","address":" 2F","state":"运行中","createtime":"2019-05-12"},
+		  {"device_id":"IBC5689 ","type":"IBC","address":"4F ","state":"运行中","createtime":"2019-05-12"},
+	  ]}
+      //数据表格使用
+        var g;
+      	var gridData;
+		
+		function initComplete(){
+			 g = $("#maingrid").quiGrid({
+				 columns: [ 
+	                { display: '设备编号', name: 'device_id',  align: 'left', width: "40%"},
+				    { display: '地址', name: 'address', 	 align: 'left', width: "40%"},
+				    { display: '类型', name: 'type', align: 'left', width: "20%"}			    
+	              ], 
+	              data:testData,  sortName: 'name',rownumbers:true,dataAction:'local',usePager: true,
+                height: '100%', width:"100%",heightDiff:-40,percentWidthMode:true,rowNumberMemory:true
+            });
+		}
+
+		$(function(){
+			
+		})
+		
+
+		//搜索设备
+		function searchDevicesByIDAndAddress(){
+			//刷新表格 收到数据存入grid_data_onsearch
+			top.Toast("showNoticeToast", $("#IDAndAddress").val());
+			//g.loadData(grid_data_onsearch);
+		}
+		//重置搜索
+		function cancelSearchDevices(){
+			$("#IDAndAddress").val(null);
+			g.loadData(gridData);
+		}
+
+		function getSelectedDeviceID(){
+			var row = g.getSelectedRow();
+			if(row!=null)
+				return row.name;
+			else
+				return null;
+			//console.log(JSON.stringify(row));
+		}
+		
+</script>		
+</body>
+</html>

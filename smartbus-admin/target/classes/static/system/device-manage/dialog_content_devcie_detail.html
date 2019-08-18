@@ -1,0 +1,372 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title></title>
+
+    <!--框架必需-->
+    <script src="/libs/quickui/libs/js/jquery.js"></script>
+    <script src="/libs/quickui/libs/js/language/cn.js"></script>
+    <script src="/libs/quickui/libs/js/framework.js"></script>
+    <link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+    <link rel="stylesheet" type="text/css" id="customSkin" />
+
+    <!--基本选项卡start-->
+    <script type="text/javascript" src="/libs/quickui/libs/js/nav/basicTab.js"></script>
+    <!--基本选项卡end-->
+
+    <!-- 日期选择框start -->
+    <script type="text/javascript" src="/libs/quickui/libs/js/form/datePicker/WdatePicker.js"></script>
+    <!-- 日期选择框end -->
+
+    <!-- Chart.js -->
+    <script src="../mylibs/js/Chart.bundle.js"></script>
+    <script src="../mylibs/js/utils.js"></script>
+    <script src="../mylibs/js/moment.min.js"></script>
+
+    <style type="text/css">
+        #demo1 .basicTab_top {
+            border: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="page_content">
+
+        <div class="basicTab">
+            <div name="实时监测" style="width:100%;height:100%;">
+                <div width="100%" height="100%">
+                    <canvas id="Chart1"></canvas>
+                </div>
+            </div>
+
+            <div name="历史查询" style="width:100%;height:100%;">
+                <div>
+                    <table>
+                        <tr>
+                            <td width="80" class="left">起止日期：</td>
+                            <td class="right">
+                                <table cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td><input type="text" id="beginTime" class="dateIcon"/></td>
+                                        <td>-</td>
+                                        <td><input type="text" id="endTime" class="dateIcon"/></td>
+                                        <td style="padding-left:5px;">
+                                            <input type="button" value="确 定" id="dateRange"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <canvas id="Chart2"></canvas>
+            </div>
+
+            <div name="过温记录" style="width:100%;height:100%;">
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        var device_id = sessionStorage.getItem('deviceIDSeclectedInPage-dataDisplay2D');
+        function initComplete() {
+            try {
+                dateSkin = themeColor;
+            } catch (e) {
+            }
+            //自定义点击触发日期控件
+            document.getElementById('beginTime').onfocus = function () {
+                var endtimeTf = $dp.$('endTime');
+                WdatePicker({
+                    skin: dateSkin,
+                    onpicked: function () {
+                        endtimeTf.focus();
+                    },
+                    //maxDate: '#F{$dp.$D(\'endTime\')}',
+                    maxDate: '%y-%M-%d %H:%m',
+                    dateFmt: "yyyy-MM-dd HH:mm"
+                });
+            }
+            document.getElementById('endTime').onfocus = function () {
+                WdatePicker({
+                    skin: dateSkin,
+                    minDate: '#F{$dp.$D(\'beginTime\')}',
+                    dateFmt: "yyyy-MM-dd HH:mm",
+                    maxDate: '%y-%M-%d %H:%m'
+                });
+            }
+        }
+
+        //提交选中时间
+        $(function () {
+            $("#dateRange").click(function () {
+                value1 = $("#beginTime").val();
+                value2 = $("#endTime").val();
+                if (value1 == "" || value2 == "") {
+                    top.Toast("showNoticeToast", "时间段不完整！");
+                    return;
+                } else {
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!异步查询，返回config.data.datasets[i].data
+                }
+            })
+        });
+
+
+        //两个图表
+        var randomScalingFactor = function () {
+            return Math.round(Math.random() * 20 + 20)
+        };
+        var color = Chart.helpers.color;
+        var config1 = {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: '温度1',
+                    backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                    borderColor: window.chartColors.red,
+                    fill: false,//是否围成面积
+                    data: [{
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }],
+                }, {
+                    label: '温度2',
+                     backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                    borderColor: window.chartColors.blue,
+                    fill: false,
+                    data: [{
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }, {
+                        x: newDate(),
+                        y: randomScalingFactor()
+                    }]
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: '实时温度折线图'
+                },
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '时间'
+                        },
+                        ticks: {
+                            major: {
+                                fontStyle: 'bold',
+                                fontColor: '#FF0000'
+                            }
+                        },
+                        time: {
+                            unit: 'second'//显示格式
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '温度'
+                        },
+                    }]
+                },
+                animation: {
+                    duration: 400,//动画时间
+                },
+            }
+        };
+        var config2 = {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: '温度1',
+                    backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                    borderColor: window.chartColors.red,
+                    fill: false,//是否围成面积
+                    data: [{
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }],
+                        }, {
+                            label: '温度2',
+                            backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                            borderColor: window.chartColors.blue,
+                            fill: false,
+                            data: [{
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }, {
+                                x: newDate(),
+                                y: randomScalingFactor()
+                            }]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: '历史温度'
+                        },
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: '时间'
+                                },
+                                ticks: {
+                                    major: {
+                                        fontStyle: 'bold',
+                                        fontColor: '#FF0000'
+                                    }
+                                },
+                                time: {
+                                    unit: 'second'//显示格式
+                                }
+                            }],
+                            yAxes: [{
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: '温度'
+                                },
+                            }]
+                        },
+                        animation: {
+                            duration: 1500,//动画时间
+                        },
+                    }
+                };
+
+                var ctx1 = document.getElementById("Chart1").getContext("2d");
+                window.myLineChart1 = new Chart(ctx1, config1);
+                var ctx2 = document.getElementById("Chart2").getContext("2d");
+                window.myLineChart2 = new Chart(ctx2, config2);
+
+                //定时循环更新
+                window.setInterval(chartUpdate, 1000);
+
+                function chartUpdate() {
+                    if (config1.data.datasets.length > 0) {
+                        config1.data.datasets[0].data.push({
+                            x: newDate(),
+                            y: randomScalingFactor()
+                        });
+                        config1.data.datasets[1].data.push({
+                            x: newDate(),
+                            y: randomScalingFactor()
+                        });
+                    }
+                    config1.data.datasets.forEach(function (dataset) {
+                        dataset.data.splice(0, 1);
+                    });
+                    window.myLineChart1.update();
+                }
+
+        function newDate() {
+            return moment().toDate();
+        }
+
+        var timer = null;
+        //定时器 10秒轮询
+        function monitorOder() {
+            timer = window.setInterval(queryData,10000);//10秒一次
+        }
+        
+        function queryData() {
+            $.ajax({
+                type: "POST",
+                contentType: JSON,
+                url: "http:localhost:80/deviceAction.do?method=getDeviceList",
+                data:device_id,
+                //请求成功
+                success: function (data) {
+                //赋给data
+                },
+                //请求失败，包含具体的错误信息
+                error: function (e) {
+                    console.log(e.status);
+                    console.log(e.responseText);
+                },
+            });
+        }
+    </script>
+</body>
+</html>

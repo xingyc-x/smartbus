@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	/*.anchorBL{ display:none;}  //去除左下角logo*/
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=AmsZRaFKFstaqbY7hn6mLICFpgvtjMw1"></script>
+	<title>地图展示</title>
+
+	<!--框架必需-->
+	<script src="/libs/quickui/libs/js/jquery.js"></script>
+	<script src="/libs/quickui/libs/js/language/cn.js"></script>
+	<script src="/libs/quickui/libs/js/framework.js"></script>
+	<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+	<link rel="stylesheet" type="text/css" id="customSkin" />
+	<!--框架必需end-->
+	<!-- 表单验证start -->
+	<script src="/libs/quickui/libs/js/form/validationRule.js" type="text/javascript"></script>
+	<script src="/libs/quickui/libs/js/form/validation.js" type="text/javascript"></script>
+	<!-- 表单验证end -->
+	<style type="text/css">
+		#l-map{height:300px;width:100%;}
+		#r-result{width:100%;}
+	</style>
+</head>
+<body>
+	<table>
+		<tr>
+			
+			<td id="r-result">请输入:<input type="text" id="suggestId" size="20" placeholder="点击搜索后的标注点完成地点选择" value="百度" style="width:250px;" /></td>
+			<td nowrap style="width:200px" class="ali03"></td>
+		</tr>
+	</table>
+	
+	<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+	<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+	// 百度地图API功能
+	function G(id) {
+		return document.getElementById(id);
+	};
+	var map = new BMap.Map("allmap", {enableMapClick:false});    // 创建Map实例
+	map.centerAndZoom("南京", 7);  // 初始化地图,设置中心点坐标和地图级别
+	map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+	
+	 // 添加定位控件
+	  var geolocationControl = new BMap.GeolocationControl();
+	  geolocationControl.addEventListener("locationSuccess", function(e){
+	    // 定位成功事件
+	    var address = '';
+	    address += e.addressComponent.province;
+	    address += e.addressComponent.city;
+	    address += e.addressComponent.district;
+	    address += e.addressComponent.street;
+	    address += e.addressComponent.streetNumber;
+	    alert("当前定位地址为：" + address);
+	  });
+	  geolocationControl.addEventListener("locationError",function(e){
+	    // 定位失败事件
+	    alert(e.message);
+	  });
+	  map.addControl(geolocationControl);
+	  
+	var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+				{"input" : "suggestId"
+				,"location" : map
+	});
+	
+	ac.addEventListener("onhighlight", function(e) {  //鼠标放在下拉列表上的事件
+		var str = "";
+			var _value = e.fromitem.value;
+			var value = "";
+			if (e.fromitem.index > -1) {
+				value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			}    
+			str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+			
+			value = "";
+			if (e.toitem.index > -1) {
+				_value = e.toitem.value;
+				value = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			}    
+			str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+			G("searchResultPanel").innerHTML = str;
+		});
+
+		var myValue;
+		ac.addEventListener("onconfirm", function(e) {    //鼠标点击下拉列表后的事件
+		var _value = e.item.value;
+			myValue = _value.province +  _value.city +  _value.district +  _value.street +  _value.business;
+			G("searchResultPanel").innerHTML ="onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+			
+			setPlace();
+		});
+
+		function setPlace(){
+			map.clearOverlays();    //清除地图上所有覆盖物
+			function myFun(){
+				var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+				map.centerAndZoom(pp, 16);
+				var marker = new BMap.Marker(pp);
+				marker.addEventListener("click",confirm);
+				map.addOverlay(marker);    //添加标注
+			}
+			var local = new BMap.LocalSearch(map, { //智能搜索
+			  onSearchComplete: myFun
+			});
+			local.search(myValue);
+		}
+		
+		function confirm(e){
+			var p = e.target;
+			var locations = myValue + "/"+ p.getPosition().lng +"/"+ p.getPosition().lat;
+			//$("#input1").val(locations);
+			//alert("marker的位置是" + p.getPosition().lng + "," + p.getPosition().lat); 
+	        top.Dialog.confirm("确定选择该地作为项目地址吗",function(){
+	    		var formData = {"form":{
+	    			"address":myValue}
+	    		};
+	    		//alert(locations);
+	    		//top.document.getElementById("a1").contentWindow.document.getElementById("address").vaule = locations;
+	    		$("#address",top.document.getElementById("_DialogFrame_a1").contentWindow.document).val(locations);
+	    		//写入经纬度p.getPosition().lng，p.getPosition().lat
+				top.Dialog.close();
+	        },function(){});
+		}
+
+	  
+</script>

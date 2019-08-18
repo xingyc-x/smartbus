@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>基本表格模板</title>
+	<!--框架必需-->
+	<script src="/libs/quickui/libs/js/jquery.js"></script>
+	<script src="/libs/quickui/libs/js/language/cn.js"></script>
+	<script src="/libs/quickui/libs/js/framework.js"></script>
+	<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+	<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+	<link rel="stylesheet" type="text/css" id="customSkin" />
+
+<!--数据表格start-->
+<script src="/libs/quickui/libs/js/table/quiGrid.js" type="text/javascript"></script>
+<!--数据表格end-->
+
+<!--分页start-->
+<script type="text/javascript" src="/libs/quickui/libs/js/nav/pageNumber.js"></script>
+<!--分页end-->
+
+</head>
+<body>
+ 	<div class="page_content">
+		<div id="maingrid"></div>
+    </div>
+<div id="pageContent" style="height:35px;"></div>	
+<script type="text/javascript">
+	var testData={"form.paginate.pageNo":1,"form.paginate.totalRows":8,"rows":[
+		{"id":001,"deviceid":"IBC0013 IBC3434","temperature":"50","time":"2019-05-15 12:36"},
+		{"id":002,"deviceid":"IBC0013 IBC7777","temperature":"59","time":"2019-05-14 05:33"},
+		{"id":003,"deviceid":"IBC3457 IBC3434","temperature":"49","time":"2019-05-15 19:34"},
+		{"id":004,"deviceid":"IBC3457","temperature":"51","time":"2019-05-15 19:00"},
+	]}
+      //数据表格使用
+        var g;
+      	var gridData;
+		
+		function initComplete(){
+			 g = $("#maingrid").quiGrid({
+				 columns: [ 
+	                { display: '时间', name: 'time',     align: 'left', width: "20%"},
+				    { display: '最高过温', name: 'temperature', 	 align: 'left', width: "20%"},
+				    { display: '设备', name: 'deviceid', align: 'left', width: "60%"},
+				    { display: '操作', isAllowHide: false, align: 'left', width: 80,
+                        render: function (rowdata, rowindex, value, column){
+                        return '<div class="grid_opp_container">'
+                                   +'<span class="grid_opp_view" onclick="onViewUserDetail(\'' + rowdata.deviceid + '\')">查看</span>'
+                                   //+ '<span class="grid_opp_edit" onclick="onEiditUser(\'' + rowdata.name + '\')">修改</span>' 
+                                   //+ '<span class="grid_opp_delete" onclick="onDeleteUser(\'' + rowdata.name + '\')">删除</span>'
+                               + '</div>';
+                     }
+				    }
+	              ], 
+	              data:testData,  sortName: 'name',rownumbers:true,dataAction:'local',usePager: true,
+                height: '100%', width:"100%",heightDiff:-40,percentWidthMode:true,rowNumberMemory:true
+            });
+		}
+
+		$(function(){
+			/*
+			g.options.sortName = "userId";
+						g.options.sortOrder = "desc";
+						getData(g.options.sortName,g.options.sortOrder,g_pageNo,g_pageSize);
+			*/
+		})
+		/*
+		function getData(sort,direction,pageNo,pageSize){
+			$.post("../../userAction.do?method=getUsers",
+					{"sort":sort,
+					 "direction":direction,
+					 "pager.pageNo":pageNo,
+					 "pager.pageSize":pageSize
+					},
+					function(result){
+						gridData = result;
+						//刷新表格
+						g.loadData(gridData);
+						
+						var $pager=$('<div class="pageNumber" showSelect="true"></div>');
+				 		$pager.attr("total",gridData["pager.totalRows"]);
+				        var $pagerCon = $('<div class="float_left padding5">' + "共有" + gridData["pager.totalRows"] + "条记录" + '</div><div class="float_right padding5"></div><div class="clear"></div>');
+						$pagerCon.eq(1).append($pager);
+						$("#pageContent").append($pagerCon);
+						$pager.render();
+						$pager.bind("pageChange",function(e,index){
+							g_pageNo = index + 1;
+							getData2(g.options.sortName,g.options.direction,g_pageNo,g_pageSize);			
+						})
+						$pager.bind("sizeChange",function(e,num){
+							g_pageSize = num;
+							getData2(g.options.sortName,g.options.sortOrder,g_pageNo,g_pageSize);
+						})
+					},"json");
+		}
+		
+		function getData2(sort,direction,pageNo,pageSize){
+			$.post("../../userAction.do?method=getUsers",
+					{"sort":sort,
+					 "direction":direction,
+					 "pager.pageNo":pageNo,
+					 "pager.pageSize":pageSize
+					},
+					function(result){
+						gridData = result;
+						//刷新表格
+						g.loadData(gridData);
+					},"json");
+		}
+		*/
+
+		//搜索用户
+		function searchUsersByNameAndCompany(){
+			//刷新表格
+			//top.Toast("showNoticeToast", $("#nameAndCompany").val());
+			//g.loadData(grid_data_onsearch);
+		}
+		//重置搜索
+		function cancelSearchUsers(){
+			$("#nameAndCompany").val(null);
+			g.loadData(gridData);
+		}
+		//添加用户
+		function addUser(){
+	        var diag = new top.Dialog();
+			diag.Title = "添加用户信息";
+			diag.URL = "../../html/dialog_content_add_user.html";
+			diag.Width = 800;
+			diag.Height = 600;
+			diag.show();
+		}
+		
+	    function onViewUserDetail(rowName){
+	        //top.Toast("showNoticeToast", "选择的查看的是:" + rowName +"的详细记录" );
+	        jQuery.jCookie('userNameSelected',rowName);
+	        
+			var diag = new top.Dialog();
+			diag.Title = "详细信息";
+			//diag.URL = "javascript:void(document.write('点击确定按钮'))";
+			diag.URL = "../../html/dialog_content_user_detail.html";
+			diag.Width = 800;
+			diag.Height = 600;
+			/*
+			diag.ShowButtonRow = true;
+			diag.OkButtonText = " 确 定 ";
+			diag.OKEvent = function() {
+				// top.Dialog.alert("成功提交", function() {
+				// 	window.location.reload()
+				// })
+				top.Toast("showNoticeToast", "成功提交")
+				window.location.reload()
+				diag.close();
+			};
+			*/
+			diag.show();
+		}
+	    
+	    function onEiditUser(rowName){
+	        //cookie存储
+	    	//jQuery.jCookie('userNameSelected',rowName);	  
+	        sessionStorage.setItem('userNameSelected', rowName);
+	        var diag = new top.Dialog();
+			diag.Title = "修改用户信息";
+			diag.URL = "../../html/dialog_content_user_detail_revise.html";
+			diag.Width = 800;
+			diag.Height = 600;
+			diag.show();
+		}
+		
+	    function onDeleteUser(rowName){
+	        jQuery.jCookie('userNameSelected',rowName);	    
+	        top.Dialog.confirm("确定删除",function(){
+	        	//top.Toast("showNoticeToast", "异步提交申请删除")
+	        	//
+	        	window.location.reload();
+	        },function(){});
+			
+		}
+		
+</script>		
+</body>
+</html>

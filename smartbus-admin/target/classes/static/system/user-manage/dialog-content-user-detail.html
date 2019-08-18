@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+  <!--框架必需-->
+  <script src="/libs/quickui/libs/js/jquery.js"></script>
+  <script src="/libs/quickui/libs/js/language/cn.js"></script>
+  <script src="/libs/quickui/libs/js/framework.js"></script>
+  <link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+  <link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+  <link rel="stylesheet" type="text/css" id="customSkin" />
+<!--框架必需end-->
+
+<!-- 日期选择框start -->
+<script type="text/javascript" src="/libs/quickui/libs/js/form/datePicker/WdatePicker.js"></script>
+<!-- 日期选择框end -->
+
+<!-- 数字步进器start -->
+<script type="text/javascript" src="/libs/quickui/libs/js/form/stepper.js"></script>
+<!-- 数字步进器end -->
+
+
+<!-- 表单验证start -->
+<script src="/libs/quickui/libs/js/form/validationRule.js" type="text/javascript"></script>
+<script src="/libs/quickui/libs/js/form/validation.js" type="text/javascript"></script>
+<!-- 表单验证end -->
+</head>
+<style>
+.formLayoutContent{
+  border: 0!important;
+}
+.formLayoutContent  .ele{
+  /*在这里自定义表单元素容器宽度*/
+}
+.formLayoutContent  .eleValidateInfo{
+  /*在这里自定义表单元素容器宽度*/
+}
+</style>
+<script>
+  $(document).ready(function(){
+
+  });
+
+</script>
+<body>
+<div class="page_content">  
+  <div class="infoCard">
+    <div class="title">
+      <span>信息展示</span>
+    </div>
+    <div class="content">
+      <table cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td width="210" class="ver01">
+            <img src="/libs/quickui/libs/images/demo/demo5.jpg"/>
+          </td>
+          <td width="100%" class="ver01">
+            <div class="formLayout">
+              <div class="formLayoutContent">
+                <table id = "myTable" class="formStyle">
+                  <input type="hidden" name="userId" value= userId/>
+                  <!--<input type="hidden" name="isupdate" value="1"/>-->
+                  <tr>
+                    <td width="110" class="ali03">用户名：</td>
+                    <td></td>
+                  </tr>
+
+                  <tr>
+                    <td class="ali03">姓名：</td>
+                    <td></td>
+                  </tr>
+                  <!--
+                  <tr>
+                    <td class="ali03">性别：</td>
+                    <td ></td>
+                  </tr>
+                  -->
+                  <tr>
+                    <td class="ali03">所属单位：</td>
+                    <td ></td>
+                  </tr>
+
+                  <tr>
+                    <td class="ali03">电话号码：</td>
+                    <td></td>
+                  </tr>
+
+                  <tr>
+                    <td class="ali03">邮箱：</td>
+                    <td></td>
+                  </tr>
+
+                  <tr>
+                    <td class="ali03">权限等级：</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td class="ali03">报警方式：</td>
+                    <td><!--这里是用来放数据的--></td>
+                  </tr>
+                  <tr>
+                    <td class="ali03">涉及项目：</td>
+                    <td><!--这里是用来放数据的--></td>
+                  </tr>
+                  <!--
+                  <tr>
+                    <td class="ali03">入职时间：</td>
+                    <td></td>
+                  </tr>
+
+                  <tr>
+                    <td class="ali03">学历：</td>
+                    <td></td>
+
+                  </tr>
+
+                  <tr>
+                    <td class="ali03">备注信息：</td>
+                    <td ></td>
+                  </tr>
+                  -->
+                </table>
+
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  
+</div>
+<script src="show_detail.js"></script>
+</body>
+</html>
