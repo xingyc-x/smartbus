@@ -1,8 +1,0 @@
-com\pcis\smartbus\db\domain\User$Column.class
-com\pcis\smartbus\db\handler\JsonStringArrayTypeHandler.class
-com\pcis\smartbus\db\domain\WTAdmin.class
-com\pcis\smartbus\db\handler\JsonIntegerArrayTypeHandler.class
-com\pcis\smartbus\db\dao\WTAdminMapper.class
-com\pcis\smartbus\db\domain\WTAdmin$Column.class
-com\pcis\smartbus\db\dao\UserMapper.class
-com\pcis\smartbus\db\domain\User.class
