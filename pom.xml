@@ -12,7 +12,8 @@
         <module>smartbus-common</module>
         <module>smartbus-tools</module>
         <module>smartbus-mq</module>
-    <module>smartbus-project</module>
+    	<module>smartbus-project</module>
+    	<module>smartbus-project-center</module>
   </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

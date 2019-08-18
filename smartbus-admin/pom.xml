@@ -58,8 +58,10 @@
         <dependency>
             <groupId>com.pcis</groupId>
             <artifactId>smartbus-project</artifactId>
-            <version>${project.version}</version>
+            <version>${project.version}</version>          
         </dependency>
+        <dependency>
+        	<groupId>com.pcis</groupId>
             <artifactId>smartbus-project-center</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -20,7 +20,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>RELEASE</version>
         </dependency>
  
         <!-- 模板引擎 -->
