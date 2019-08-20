@@ -34,41 +34,46 @@
         SELECT * FROM smartbus_user ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
     </select>
 
+    <!--获取用户列表-->
     <select id= "getAPageUser" resultMap= "BaseResultMap">
         <if test="direction == 'asc'">
-        SELECT * FROM smartbus_user ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
+            SELECT * FROM smartbus_user WHERE company_id LIKE ${companyIdString} ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
         </if>
         <if test="direction == 'desc'">
-            SELECT * FROM smartbus_user ORDER BY ${sortBy} DESC LIMIT ${startNo},${pageSize};
+            SELECT * FROM smartbus_user WHERE company_id LIKE ${companyIdString} ORDER BY ${sortBy} DESC LIMIT ${startNo},${pageSize};
         </if>
     </select>
 
+    <!--根据用户名搜索获取用户列表-->
     <select id= "getAPageUserByNameSearch" resultMap= "BaseResultMap">
         <if test="direction == 'desc'">
-            SELECT * FROM smartbus_user WHERE real_name LIKE #{searchContent} ORDER BY ${sortBy} DESC LIMIT ${startNo},${pageSize};
+            SELECT * FROM smartbus_user WHERE real_name LIKE #{searchContent} AND company_id LIKE ${companyIdString} ORDER BY ${sortBy} DESC LIMIT ${startNo},${pageSize};
         </if>
         <if test="direction == 'asc'">
-            SELECT * FROM smartbus_user WHERE real_name LIKE #{searchContent} ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
+            SELECT * FROM smartbus_user WHERE real_name LIKE #{searchContent} AND company_id LIKE ${companyIdString} ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
         </if>
     </select>
 
+    <!--根据权限搜索获取用户列表-->
     <select id= "getAPageUserByCapacity" resultMap= "BaseResultMap">
         <if test="direction == 'desc'">
-            SELECT * FROM smartbus_user WHERE capacity = ${capacity} ORDER BY ${sortBy} DESC LIMIT ${startNo},${pageSize};
+            SELECT * FROM smartbus_user WHERE capacity = ${capacity} AND company_id LIKE ${companyIdString} ORDER BY ${sortBy} DESC LIMIT ${startNo},${pageSize};
         </if>
         <if test="direction == 'asc'">
-            SELECT * FROM smartbus_user WHERE capacity = ${capacity} ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
+            SELECT * FROM smartbus_user WHERE capacity = ${capacity} AND company_id LIKE ${companyIdString} ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
         </if>
     </select>
 
+    <!--根据公司搜索获取用户列表-->
     <select id= "getAPageUserByCompanySearch" resultMap= "BaseResultMap">
         <if test="direction == 'desc'">
-            SELECT smartbus_user.* FROM smartbus_user,company WHERE smartbus_user.company_id=company.id AND company.company_name LIKE #{searchContent} ORDER BY smartbus_user.${sortBy} DESC;
+            SELECT smartbus_user.* FROM smartbus_user,company WHERE smartbus_user.company_id=company.id AND company.company_name LIKE #{searchContent} AND company_id LIKE ${companyIdString} ORDER BY smartbus_user.${sortBy} DESC LIMIT ${startNo},${pageSize};
         </if>
         <if test="direction == 'asc'">
-            SELECT smartbus_user.* FROM smartbus_user,company WHERE smartbus_user.company_id=company.id AND company.company_name LIKE #{searchContent} ORDER BY smartbus_user.${sortBy};
+            SELECT smartbus_user.* FROM smartbus_user,company WHERE smartbus_user.company_id=company.id AND company.company_name LIKE #{searchContent} AND company_id LIKE ${companyIdString} ORDER BY smartbus_user.${sortBy} LIMIT ${startNo},${pageSize};
         </if>
     </select>
+
 
     <select id= "getUserNumByNameSearch" resultType="java.lang.Integer">
         SELECT COUNT(id) FROM smartbus_user WHERE real_name LIKE #{searchContent};

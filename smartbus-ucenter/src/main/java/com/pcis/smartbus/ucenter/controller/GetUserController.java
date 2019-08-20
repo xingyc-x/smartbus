@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,40 +85,45 @@ public class GetUserController {
         return object.toJSONString();
     }
 
-    @PostMapping(value = "api/user/getUserInfo")
-    public String getUserInfo(
-            @RequestParam("pager.pageNo")int pageNo,
-            @RequestParam("pager.pageSize")int pageSize,
-            @RequestParam("sort")String sort,
-            @RequestParam("direction")String direction
-    ) {
+    // 非搜索方式获取用户列表
+    public String getUserInfo(int pageNo, int pageSize, String sort, String direction, String companyIdString) {
 
         String sortBy = changeSortLabel(sort);
         int startNo = getPageStartNo(pageNo, pageSize);
-        List<SmartbusUser> smartbusUsers = userService.getAPageUser(startNo, pageSize, sortBy, direction);
+        List<SmartbusUser> smartbusUsers = userService.getAPageUser(startNo, pageSize, sortBy, direction, companyIdString);
         int numUser = userService.getUserNum();
         return packToJson(pageNo, numUser, smartbusUsers);
 
     }
 
-
-    @PostMapping(value = "api/user/getUserInfoBySearch")
-    public String getUserInfoBySearch(
-            @RequestParam("pager.pageNo")int pageNo,
-            @RequestParam("pager.pageSize")int pageSize,
-            @RequestParam("sort")String sort,
-            @RequestParam("direction")String direction,
-            @RequestParam("searchIf")int searchIf,
-            @RequestParam("searchInput")String searchInput
-    ) {
-
+    // 使用搜索的方法获取用户列表，此处有SQL注入漏洞
+    public String getUserInfoBySearch(int pageNo, int pageSize, String sort, String direction, int searchIf, String searchInput, String companyIdString) {
         String sortBy = changeSortLabel(sort);
         int startNo = getPageStartNo(pageNo, pageSize);
-        List<SmartbusUser> smartbusUsers = userService.getAPageUserBySearch(startNo, pageSize, sortBy, direction, searchIf, searchInput);
+        List<SmartbusUser> smartbusUsers = userService.getAPageUserBySearch(startNo, pageSize, sortBy, direction, searchIf, searchInput, companyIdString);
         int numUser = userService.getUserNumBySearch(searchIf, searchInput);
         return packToJson(pageNo, numUser, smartbusUsers);
 
     }
+
+    //获取用户公司id
+    private String getCompanyIdString(HttpSession session) {
+        int myId = (int) session.getAttribute(Constant.USER_ID);
+        SmartbusUser smartbusUser = userService.getUserById(myId);
+        if (smartbusUser == null) {
+            return null;
+        }
+        int companyId = smartbusUser.getCompanyId();
+        String companyIdString;
+        if (companyId == Constant.WEITEN_ID) {
+            companyIdString = "'%'";
+        } else {
+            companyIdString = "'" + companyId + "'";
+        }
+        return companyIdString;
+    }
+
+    // 获取用户列表,这里才是前端的入口
     @PostMapping(value = "api/user/getUserInfo2")
     public String getUserInfo2(
             @RequestParam("pager.pageNo")int pageNo,
@@ -128,15 +134,20 @@ public class GetUserController {
     ) {
         int searchIf = 0;
         String searchInput = "";
+        HttpSession session = request.getSession();
+        String companyIdString = getCompanyIdString(session);
+        if (companyIdString == null) {
+            return "Error: without this user!";
+        }
         try {
             searchIf = Integer.valueOf(request.getParameter("searchIf"));
             searchInput = request.getParameter("searchInput");
             //System.out.println(searchInput +"21"+ searchIf);
-            return getUserInfoBySearch(pageNo, pageSize, sort, direction,searchIf,searchInput);
+            return getUserInfoBySearch(pageNo, pageSize, sort, direction,searchIf,searchInput, companyIdString);
 
         } catch (Exception e) {
             //logger.error(e.getMessage());
-            return getUserInfo(pageNo, pageSize, sort, direction);
+            return getUserInfo(pageNo, pageSize, sort, direction, companyIdString);
         }
     }
 

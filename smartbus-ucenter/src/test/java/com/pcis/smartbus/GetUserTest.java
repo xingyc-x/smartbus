@@ -119,13 +119,6 @@ public class GetUserTest {
         logger.info(String.valueOf(companyService));
     }
 
-    @Test
-    public void test5() throws Exception {
-        int num = userService.getUserNum();
-        System.out.println(num);
-        List<SmartbusUser> smartbusUsers = userService.getAPageUser(1, 10, "id", "desc");
-        logger.info(String.valueOf(smartbusUsers));
-    }
 
     @Test
     public void test6() throws Exception {

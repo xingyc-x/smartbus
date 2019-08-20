@@ -11,8 +11,8 @@ public interface UserService {
     //如果没有该用户，则返回null
     SmartbusUser geUserByName(String userName);
     int getUserNum();
-    List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction);
-    List<SmartbusUser> getAPageUserBySearch(int startNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput);
+    List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction, String companyIdString);
+    List<SmartbusUser> getAPageUserBySearch(int startNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput, String companyIdString);
     int getUserNumBySearch(int searchIf, String searchInput);
     SmartbusUser getUserById(int id);
 
