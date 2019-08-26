@@ -6,6 +6,8 @@ import com.pcis.smartbus.db.domain.Project;
 import com.pcis.smartbus.db.domain.ProjectUserRelation;
 import com.pcis.smartbus.pcenter.service.ProjectService;
 import com.pcis.smartbus.ucenter.service.UserProjectRelationService;
+import com.pcis.smartbus.utils.RedisUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +31,8 @@ public class ReviseProjectController {
     @Autowired
     UserProjectRelationService userProjectRelationService;
 
+    @Autowired
+    RedisUtil redisUtil;
     //怎么能把删除写在这儿，不是应该另起文件吗
     @PostMapping(value = "api/project/deleteProject")
     public String deleteUser(@RequestParam("projectId")int projectId, HttpSession session) {
@@ -39,7 +43,12 @@ public class ReviseProjectController {
         if ((myCapacity == Constant.WEITEN_SALESMAN || myCapacity == Constant.WEITEN_ADMIN) && flag) {
             if(projectService.deleteProjectById(projectId) == 1) {
                 userProjectRelationService.deleteByProjectId(projectId);
+                //此处在redis里面将project删除掉
+                redisUtil.Delete("project:" + projectId);
                 return PASS;
+                
+
+
             } else {
                 return NO_PASS;
             }
@@ -68,7 +77,7 @@ public class ReviseProjectController {
                 jsonObject.put("info", "修改项目失败，该项目不存在！");
             }
             project.setOrder(order);
-            project.setCompanyId(companyId);
+            project.setCompanyId(1);
             project.setLocation(address);
             project.setIntroduction(info);
             //LocalDateTime localDateTime = LocalDateTime.now();
@@ -79,6 +88,8 @@ public class ReviseProjectController {
             if (temp) {
                 jsonObject.put("status", true);
                 jsonObject.put("info", "修改项目成功！");
+                //在redis里面修改project对象
+                redisUtil.ComSet("project:"+projectId, project);
             } else {
                 jsonObject.put("status", false);
                 jsonObject.put("info", "修改项目失败！");

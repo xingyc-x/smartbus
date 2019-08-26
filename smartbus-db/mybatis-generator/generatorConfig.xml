@@ -59,20 +59,26 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.pcis.smartbus.db.dao"
                              targetProject="src/main/java"/>
         <!--表名-->
-        <table tableName="user" domainObjectName="User" 
+        <table tableName="smartbus_user"  
         	 enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table tableName="company">
+        <table tableName="company" 
+         enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
-        <table tableName="project_user_relation">
+        <table tableName="project_user_relation"
+         enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="project">
+        <table tableName="project"
+         enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 

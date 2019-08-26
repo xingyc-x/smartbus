@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes={UCenterApplication.class})
+@SpringBootTest()
 public class AddUserTest {
     @Autowired
     AddUserController addUserController;

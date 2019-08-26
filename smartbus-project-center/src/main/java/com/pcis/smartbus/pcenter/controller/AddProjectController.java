@@ -6,6 +6,8 @@ import com.pcis.smartbus.db.domain.Project;
 import com.pcis.smartbus.db.domain.ProjectUserRelation;
 import com.pcis.smartbus.pcenter.service.ProjectService;
 import com.pcis.smartbus.ucenter.service.UserProjectRelationService;
+import com.pcis.smartbus.utils.RedisUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +26,8 @@ public class AddProjectController {
     @Autowired
     UserProjectRelationService userProjectRelationService;
 
+    @Autowired
+    RedisUtil redisUtil;
     @GetMapping(value = "api/project/validateProjectOrder")
     public String validateProjectOrder(
             @RequestParam("validateValue")String order,
@@ -42,10 +46,11 @@ public class AddProjectController {
         return temp.toJSONString();
     }
 
+    //此处将companuId从int改为String,因为没有新建公司的选项
     @PostMapping(value = "api/project/addProject")
     public String addProject(
             @RequestParam("order")String order,
-            @RequestParam("company")int companyId,
+            @RequestParam("company")String companyId,
             @RequestParam("address")String address,
             @RequestParam("info")String info,
             @RequestParam("lng")float lng,
@@ -56,8 +61,8 @@ public class AddProjectController {
         JSONObject jsonObject = new JSONObject();
         if (myCapacity == Constant.WEITEN_ADMIN || myCapacity == Constant.WEITEN_SALESMAN) {
             Project project = new Project();
-            project.setOrder(order);
-            project.setCompanyId(companyId);
+            project.setOrder(order); 
+            project.setCompanyId(1);
             project.setLocation(address);
             project.setIntroduction(info);
             LocalDateTime localDateTime = LocalDateTime.now();
@@ -68,6 +73,9 @@ public class AddProjectController {
             if (temp == 1) {
                 jsonObject.put("status", true);
                 jsonObject.put("info", "添加项目成功！");
+                
+                //在redis中添加project
+                redisUtil.ComSet("project:"+project.getId(), project);
             } else {
                 jsonObject.put("status", false);
                 jsonObject.put("info", "添加项目失败！");

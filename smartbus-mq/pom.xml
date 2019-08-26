@@ -12,4 +12,19 @@
     <artifactId>smartbus-mq</artifactId>
     <packaging>jar</packaging>
 
+	<dependencies>
+<!-- 	引入redis，作为消息队列 -->
+		<dependency>
+			<groupId>com.pcis</groupId>
+			<artifactId>smartbus-tools</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+<!-- 		引入alarm服务 -->
+		<dependency>
+			<groupId>com.pcis</groupId>
+			<artifactId>smartbus-alarm</artifactId>
+			<version>${project.version}</version>	
+		</dependency>
+	</dependencies>
 </project>

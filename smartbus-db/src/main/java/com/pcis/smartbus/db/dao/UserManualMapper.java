@@ -12,13 +12,17 @@ public interface UserManualMapper {
 
     Integer getUserNum();
 
+    //这两个接口没有用到
     List<SmartbusUser> getAPageUserDesc(int startNo, int pageSize, String sortBy);
     List<SmartbusUser> getAPageUserAsc(int startNo, int pageSize, String sortBy);
-    List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction);
 
-    List<SmartbusUser> getAPageUserByNameSearch(int startNo, int pageSize, String sortBy, String direction, String searchContent);
-    List<SmartbusUser> getAPageUserByCapacity(int startNo, int pageSize, String sortBy, String direction, int capacity);
-    List<SmartbusUser> getAPageUserByCompanySearch(int startNo, int pageSize, String sortBy, String direction, String searchContent);
+    //获取一个页面的用户，威腾公司时companyIdString = '%'
+    List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction, String companyIdString);
+
+    //通过搜索的方式获取用户列表, 威腾公司时companyIdString = '%'
+    List<SmartbusUser> getAPageUserByNameSearch(int startNo, int pageSize, String sortBy, String direction, String searchContent, String companyIdString);
+    List<SmartbusUser> getAPageUserByCapacity(int startNo, int pageSize, String sortBy, String direction, int capacity, String companyIdString);
+    List<SmartbusUser> getAPageUserByCompanySearch(int startNo, int pageSize, String sortBy, String direction, String searchContent, String companyIdString);
 
     Integer getUserNumByNameSearch(String searchContent);
     Integer getUserNumByCapacity(int capacity);

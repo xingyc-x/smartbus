@@ -1,16 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title></title>
-	<!--框架必需-->
-	<script src="/libs/quickui/libs/js/jquery.js"></script>
-	<script src="/libs/quickui/libs/js/language/cn.js"></script>
-	<script src="/libs/quickui/libs/js/framework.js"></script>
-	<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
-	<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
-	<link rel="stylesheet" type="text/css" id="customSkin" />
+		<!--框架必需start-->
+		<script type="text/javascript" src="/libs/quickui/libs/js/jquery.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/language/cn.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/framework.js"></script>
+		<link href="/libs/quickui/libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" scrollerX="true"/>
+		<link rel="stylesheet" type="text/css" id="customSkin"/>
+		<!--框架必需end-->
 
 		<!--基本选项卡start-->
 		<script type="text/javascript" src="/libs/quickui/libs/js/nav/basicTab.js"></script>
@@ -30,14 +31,14 @@
 				position:absolute;
 				width: 24px;
 				height: 40px;
-				background-image: url(/images/icons/fi1.png);
+				background-image: url(/libs/quickui/libs/images/icons/fi1.png);
 				background-repeat: no-repeat;
 				cursor: pointer;
 				cursor: hand;
 			}
 			.img_content .textarea{
 				position:absolute;
-				width: 60px;
+				width: 100px;
 				height: 30px;
 				border: solid 1px #e3e8ee;
 			}
@@ -56,92 +57,56 @@
 	</body>
 
 	<script>
+		//全局变量
 		var tabData;//项目2D平面图数据
-		var menu;//右键菜单
-
+		var pictures;
 		$(function() {
 			//异步获取tabData
-			tabData={"pictures":[
-					{"address":"A区","url":"../mylibs/images/image1.png","imgWidth":559,"imgHeight":581,"points":[
-							{"x":128,"y":194,"device_id":"IBCs1"},
-							{"x":479,"y":95,"device_id":"IBCs2"},
-							{"x":259,"y":374,"device_id":"IBCs3"}]
-					},
-					{"address":"B区","url":"../mylibs/images/image2.jpg","imgWidth":700,"imgHeight":857,"points":[
-							{"x":283,"y":454,"device_id":"IBCssd1"},
-							{"x":124,"y":473,"device_id":"IBCs2sd"}]
-					},
-					{"address":"1楼北","url":"../mylibs/images/test_2D.jpg","imgWidth":1680,"imgHeight":1050,"points":[
-							{"x":220,"y":500,"device_id":"IBC1"},
-							{"x":400,"y":800,"device_id":"IBC2"},
-							{"x":900,"y":300,"device_id":"IBC3"}]
-					},
-					{"address":"2楼南","url":"../mylibs/images/test_2D.jpg","imgWidth":1680,"imgHeight":1050,"points":[
-							{"x":220,"y":500,"device_id":"IBC1344"},
-							{"x":400,"y":800,"device_id":"IBC12234334"},
-							{"x":900,"y":300,"device_id":"IBC1223434"}]
-					},
-					{"address":"3楼南","url":"../mylibs/images/test_2D.jpg","imgWidth":1680,"imgHeight":1050,"points":[
-							{"x":220,"y":500,"device_id":"IBC1344"},
-							{"x":400,"y":800,"device_id":"IBC12234334"},
-							{"x":900,"y":300,"device_id":"IBC1223434"}]
-					},
-					{"address":"4楼","url":"../mylibs/images/test_2D.jpg","imgWidth":1680,"imgHeight":1050,"points":[
-							{"x":220,"y":500,"device_id":"IBC1344"},
-							{"x":400,"y":800,"device_id":"IBC12234334"},
-							{"x":900,"y":300,"device_id":"IBC1223434"}]
+			$.get("/project/get3DPoints",{proid:sessionStorage.getItem('project_id')},function(data,status)
+			{
+				tabData = data;
+				pictures =tabData.pictures;
+				for(k in pictures)
+				{
+					//添加选项卡tab
+					var tab=$('<div style="width:100%;height:100%;">');
+					$(".basicTab").append(tab);
+					tab.attr("name",pictures[k].address);
+					//添加图片容器
+					var img_content=$('<div class="img_content"></div>')
+					tab.append(img_content);
+					img_content.attr("id","img"+k);
+					//添加图片
+					var img=$('<img src=" ">');
+					img_content.append(img);
+					img.attr("src",pictures[k].url);
+					//添加设备标注点
+					var points=pictures[k].points;
+					for(j in points){
+						var point=$('<div class="device_icon"></div>');
+						img_content.append(point);
+						point.attr("title","设备ID："+points[j].device_id);
+						point.attr("id",points[j].device_id);
+						point.tip();
+						point.css({
+							left: points[j].x-7,
+							top: points[j].y-30
+						});
+
+						var text=$('<textarea class="textarea"></textarea>');
+						img_content.append(text);
+						text.attr("id","text"+points[j].device_id);
+						text.css({
+							left: points[j].x-7,
+							top: points[j].y-50-30,
+
+						});
+						text.attr("disabled", true);
+						text.val("0  ℃");
 					}
-				]}
-
-			if(sessionStorage.getItem('tabData')!=null){
-				tabData = JSON.parse(sessionStorage.getItem('tabData'));
-			}
-			else{
-				//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				top.Toast("showNoticeToast", "post申请获取数据tabData");
-			}
-
-			pictures = tabData.pictures;
-			for(k in pictures){
-				//添加选项卡tab
-				var tab=$('<div style="width:100%;height:100%;">');
-				$(".basicTab").append(tab);
-				tab.attr("name",pictures[k].address);
-				//添加图片容器
-				var img_content=$('<div class="img_content"></div>')
-				tab.append(img_content);
-				img_content.attr("id","img"+k);
-				//添加图片
-				var img=$('<img src=" ">');
-				img_content.append(img);
-				img.attr("src",pictures[k].url);
-				//添加设备标注点
-				var points=pictures[k].points;
-				for(j in points){
-					var point=$('<div class="device_icon"></div>');
-					img_content.append(point);
-					point.attr("title","设备ID："+points[j].device_id);
-					point.attr("id",points[j].device_id);
-					point.tip();
-					point.css({
-						left: points[j].x-7,
-						top: points[j].y-30
-					});
-
-					var text=$('<textarea class="textarea"></textarea>');
-					img_content.append(text);
-					text.attr("id","text"+points[j].device_id);
-					text.css({
-						left: points[j].x-7,
-						top: points[j].y-50-30,
-
-					});
-
-					text.attr("disabled", true);
-					text.val("0  ℃");
 				}
-			}
-			$(".basicTab").render();
+				$(".basicTab").render();
+			});
 
 			//设备点击事件绑定
 			$('.device_icon').on('click', function(){
@@ -149,41 +114,76 @@
 				sessionStorage.setItem('deviceIDSeclectedInPage-dataDisplay2D', device_id);
 				var diag = new top.Dialog();
 				diag.Title = "设备："+device_id+"详细信息";
-				diag.URL = "../../html/dialog_content_devcie_detail.html";
+				diag.URL = "/system/device-manage/dialog_content_devcie_detail.html";
 				diag.Width = 600;
 				diag.Height = 400;
 				diag.show();
 			});
 		});
 
-
-		//编辑图片按钮
+		//编辑图片按钮,将数据存入session
 		function editMap(){
 			sessionStorage.setItem('tabData', JSON.stringify(tabData));
-			window.location.href="data-display-2D-edit.html";
+			window.location.href="/system/monitor/data-display-2D-edit.html";
 		}
-
 		//
 		window.setInterval(update, 3000);
 		function update(){
-			//top.Toast("showNoticeToast", "WebSocket连接发生错误");
-			var picture=tabData.pictures;
-			for(k in pictures){
-				var points=pictures[k].points;
-				for(j in points){
-					var temperature = Math.floor(Math.random()*15+30);
-					$('#text'+points[j].device_id).val(temperature+'  ℃');
-					if(temperature>43){
-						$('#text'+points[j].device_id).css({"color":"red"});
+			
+			$.ajax({
+				//请求地址
+				url: "/project/dataGet",
+				//请求方式
+				type: "GET",
+				//请求的媒体类型
+				dataType:"text",
+				//数据，json字符串
+				data:{pageNo:"1",pageSize:"10",proid:sessionStorage.getItem('project_id')},
+				//请求成功
+				success: function (result) {
+					var data = eval('(' + result + ')').rows;
+					
+					for(k in pictures){
+						var points=pictures[k].points;
+						for(j in points){
+							for(i in data){
+								if(data[i].device_id == points[j].device_id)
+									{
+									var temperature = data[i].data;
+										$('#text'+points[j].device_id).val(temperature+"℃");
+										if(parseInt(temperature)>50 && parseInt(temperature)!=99){
+											$('#text'+points[j].device_id).css({"color":"red"});
+											$.ajax({
+												//请求地址
+												url: "/project/alarm",
+												//请求方式
+												type: "post",
+												//请求的媒体类型
+												dataType:"text",
+												//数据，json字符串
+												data:{proid:sessionStorage.getItem('project_id'),device_id:data[i].device_id ,message:"温度超限！",data:data[i].data},
+												//请求成功
+												success: function (result) {
+													
+												},
+												//请求失败，包含具体的错误信息
+												error: function (e) {
+													console.log(e.status);
+													console.log(e.responseText);
+												},
+											});
+										}
+										else{
+											$('#text'+points[j].device_id).css({"color":"green"});
+										}
+									}
+							}
+						}
 					}
-					else{
-						$('#text'+points[j].device_id).css({"color":"green"});
-					}
-
 				}
-			}
-
+			});
 		}
+
 	</script>
 
 </html>

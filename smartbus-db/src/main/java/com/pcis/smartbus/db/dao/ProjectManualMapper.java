@@ -4,6 +4,9 @@ import com.pcis.smartbus.db.domain.Project;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
 public interface ProjectManualMapper {
 
     List<Project> getAllProject();
@@ -20,4 +23,5 @@ public interface ProjectManualMapper {
     Integer getProjectNumByCompanySearch(String searchContent);
 
     Integer deleteProjectById(int projectId);
+    List<Project> getProjectsByUserIDSearch(int userID);
 }

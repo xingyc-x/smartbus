@@ -1,15 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>设备添加</title>
-		<!--框架必需-->
-		<script src="/libs/quickui/libs/js/jquery.js"></script>
-		<script src="/libs/quickui/libs/js/language/cn.js"></script>
-		<script src="/libs/quickui/libs/js/framework.js"></script>
-		<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
-		<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
-		<link rel="stylesheet" type="text/css" id="customSkin" />
+		<!--框架必需start-->
+		<script type="text/javascript" src="/libs/quickui/libs/js/jquery.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/language/cn.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/framework.js"></script>
+		<link href="/libs/quickui/libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/"/>
+		<link rel="stylesheet" type="text/css" id="customSkin"/>
+		<!--框架必需end-->
 
 		<!-- 日期选择框start -->
 		<script type="text/javascript" src="/libs/quickui/libs/js/form/datePicker/WdatePicker.js"></script>
@@ -31,12 +32,12 @@
 
 	<body>
 		<div  class="page_content">
-			<form id="myFormId" action="http://192.168.1.2:8080/project/bind/bindPoint" method="post" target="frmright" failAlert="表单填写不正确，请按要求填写！">
+			<form id="myFormId" action="/project/bind/bindPoint" method="post" target="frmright" failAlert="表单填写不正确，请按要求填写！">
 				<table class="tableStyle" formMode="transparent">
 					<tr>
 						<td>选择项目：</td>
 						<td>
-							<select id="programList" url="http://192.168.1.2:8080/project/bind" method="post" params='{"userinfor.organization.orgId":"3"}' prompt="请选择项目" name="proNummber" class="validate[required]" ></select><span class="star">*</span>
+							<select id="programList" url="/project/getallproject" method="get" params='{"userinfor.organization.orgId":"3"}' prompt="请选择项目" name="proNummber" class="validate[required]" ></select><span class="star">*</span>
 						</td>
 					</tr>
 					<tr>
@@ -45,7 +46,7 @@
 					</tr>
 					<tr>
 						<td width="120">设备总数:</td>
-						<td><input id="total" name="total" type="text"  disabled="true" class="validate[required]"/></td>
+						<td><input id="total" name="total" type="text"  readonly class="validate[required]"/></td>
 					</tr>
 					<tr id="timeTr">
 						<td>注册时间：</td><td><input type="text" name="deviceRollTime" class="date"/></td>
@@ -72,20 +73,6 @@
 		//上传组件使用
 
 		function initComplete(){
-			//静态项目数据
-			// var selData = {
-			// 	"list": [{
-			// 		"value": "123ABC",
-			// 		"key": "项目1"
-			// 	}, {
-			// 		"value": "222abc",
-			// 		"key": "项目2"
-			// 	}]
-			// };
-			// //赋给data
-			// $("#programList").data("data", selData)
-			// //刷新下拉框
-			// $("#programList").render();
 
 			//表单异步提交处理
 			$('#myFormId').submit(function(){
@@ -113,7 +100,7 @@
 		function getDeviceList() {
 			$.ajax({
 				//请求地址
-				url: "http://192.168.1.2:8080/project/bind/listPoint",
+				url: '/project/bind/listPoint',
 				//请求方式
 				type: "GET",
 				//请求的媒体类型

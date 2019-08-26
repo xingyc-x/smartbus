@@ -14,4 +14,8 @@ public class Constant {
 
     public static final int ALARM_EMAIL = 1;
     public static final int ALARM_SMS = 2;
+
+    // 威腾公司的id必须与数据库中的数据一致
+    public static final int WEITEN_ID = 1;
+
 }

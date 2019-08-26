@@ -1,5 +1,19 @@
 package com.pcis.smartbus.ucenter.controller;
 
+import static com.pcis.smartbus.common.Constant.NO_PASS;
+import static com.pcis.smartbus.common.Constant.PASS;
+
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.pcis.smartbus.common.Constant;
 import com.pcis.smartbus.db.dao.ProjectMapper;
@@ -8,20 +22,8 @@ import com.pcis.smartbus.db.domain.ProjectUserRelation;
 import com.pcis.smartbus.db.domain.SmartbusUser;
 import com.pcis.smartbus.ucenter.service.UserProjectRelationService;
 import com.pcis.smartbus.ucenter.service.UserService;
-import com.pcis.smartbus.ucenter.service.impl.UserServiceImpl;
+import com.pcis.smartbus.ucenter.utils.MD5Util;
 import com.pcis.smartbus.ucenter.utils.UserUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpSession;
-
-import java.util.List;
-
-import static com.pcis.smartbus.common.Constant.NO_PASS;
-import static com.pcis.smartbus.common.Constant.PASS;
 
 @RestController
 public class ReviseUserController {
@@ -145,7 +147,7 @@ public class ReviseUserController {
         @RequestParam("userLoginName")String userLoginName,
         @RequestParam("userPassword")String userPassword,
         @RequestParam("userName")String userName,
-        @RequestParam("userOrganization")int companyId,
+        @RequestParam("userOrganization")String companyId,
         @RequestParam("userTel")String userTel,
         @RequestParam("userEmail")String userEmail,
         @RequestParam("userLevel")int userLevel,
@@ -156,9 +158,11 @@ public class ReviseUserController {
 
         SmartbusUser operatedUser = userService.getUserById(operatedUserId);
         operatedUser.setUserName(userLoginName);
-        operatedUser.setPassword(userPassword);
+        String salt = UUID.randomUUID().toString().substring(0, 5);
+        operatedUser.setSalt(salt);
+        operatedUser.setPassword(MD5Util.MD5(userPassword+salt));
         operatedUser.setRealName(userName);
-        operatedUser.setCompanyId(companyId);
+        operatedUser.setCompanyId(1);
         operatedUser.setPhone(userTel);
         operatedUser.setEmail(userEmail);
         operatedUser.setCapacity(userLevel);

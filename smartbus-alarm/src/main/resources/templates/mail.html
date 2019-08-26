@@ -2,10 +2,16 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>警报</title>
+    <title>威腾母线监测平台报警邮件</title>
 </head>
 <body>
-您好,这是警报邮件,请点击下面的链接查看详情,<br/>
-<a href="#" th:href="@{ login/{id}(id=${id}) }">警报详情</a>
+您好<span th:text="${model['user_name']}" />(<span th:text="${model['user_realName']}" />)<br/>
+查收报警邮件：<br/>	
+		项目编号：<span th:text="${model['project_order']}"/><br/>
+		项目地址：<span th:text="${model['project_location']}"/><br/>
+		设备编号：<span th:text="${model['device']}"/><br/>
+		报警事件：<span th:text="${model['message']}"></span>
+		报警值<span th:text="${model['data']}"/></span><br/>
+		       时间：<span th:text="${model['date']}"/><br/>
 </body>
 </html>

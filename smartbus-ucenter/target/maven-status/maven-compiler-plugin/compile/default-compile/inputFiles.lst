@@ -2,6 +2,7 @@ G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\serv
 G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\utils\UserUtils.java
 G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\service\UserProjectRelationService.java
 G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\service\impl\CompanyServiceImpl.java
+G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\utils\MD5Util.java
 G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\controller\AddUserController.java
 G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\controller\CompanyController.java
 G:\github\smartbus\smartbus-ucenter\src\main\java\com\pcis\smartbus\ucenter\service\UserService.java

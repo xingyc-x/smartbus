@@ -25,11 +25,11 @@
             <artifactId>smartbus-db</artifactId>
             <version>${project.version}</version>
         </dependency>
-       <!--  <dependency>
+        <dependency>
             <groupId>com.pcis</groupId>
             <artifactId>smartbus-alarm</artifactId>
             <version>${project.version}</version>
-        </dependency> -->
+        </dependency>
         <dependency>
             <groupId>com.pcis</groupId>
             <artifactId>smartbus-report</artifactId>

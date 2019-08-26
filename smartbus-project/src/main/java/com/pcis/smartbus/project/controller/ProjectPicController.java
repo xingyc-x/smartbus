@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSONObject;
+import com.pcis.smartbus.project.service.ProjectService;
 import com.pcis.smartbus.utils.RedisUtil;
 
 /*
@@ -34,6 +35,8 @@ public class ProjectPicController {
 	@Autowired
 	RedisUtil redisUtil;
 	
+	@Autowired
+	ProjectService projectService;
 	/*
 	 * 图片上传，前端应传:项目id+区域+图片
 	 * 1.创建目录
@@ -49,6 +52,9 @@ public class ProjectPicController {
 		if(!redisUtil.Has("project:"+proid))
 			return "此项目不存在";
 		String fileName = img.getOriginalFilename();
+		boolean isImage = projectService.isImage(fileName);
+		if(!isImage)
+			return "文件不是图片";
 		//文件路径分隔符，在windows和linux下面可能不一样，部署以后需要注意
 		String separator = "//";
 		StringBuffer path = new StringBuffer();
@@ -88,7 +94,7 @@ public class ProjectPicController {
 	/*
 	 * 删除图片，前端应传项目id+区域
 	 */
-	@PostMapping(path = "/projct/deletePic")
+	@PostMapping(path = "/project/deletePic")
 	@ResponseBody
 	public String deletePic(@RequestParam("proid") String proid,
 			@RequestParam("addr") String addr) {
@@ -116,6 +122,8 @@ public class ProjectPicController {
 	@ResponseBody
 	public Object get3DPionts(@PathParam("proid") String proid)
 	{
+		if(!redisUtil.Has("project:"+proid))
+			return "error";//项目已经被删除不存在了
 		JSONObject jb = new JSONObject();
 		jb.put("proid", proid);
 		String key = "pic:"+proid;
@@ -149,6 +157,8 @@ public class ProjectPicController {
 			return "error";
 		}
 		List<Map<String,Object>> list1 = (List<Map<String, Object>>) jb.get("pictures");
+		if(list1 == null)//不必更新
+			return "ok";
 		list1.forEach(value->{
 			String addr = (String) value.get("address");
 			List<Map<String,Object>> list2 = (List<Map<String, Object>>) value.get("points");

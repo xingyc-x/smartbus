@@ -2,6 +2,9 @@ package com.pcis.smartbus.netty;
 
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.annotation.PreDestroy;
 
 import org.springframework.beans.BeansException;
@@ -36,6 +39,7 @@ public class NettyServer implements BeanFactoryAware{
 		accept.shutdownGracefully();
 		process.shutdownGracefully();
 		System.out.println("Netty线程池关闭");
+		
     }
 	public void bind(int port)
 	{

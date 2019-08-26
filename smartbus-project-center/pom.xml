@@ -30,6 +30,11 @@
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+  		<groupId>com.pcis</groupId>
+  		<artifactId>smartbus-tools</artifactId>
+  		<version>${project.version}</version>
+  	</dependency>
     </dependencies>
 
 </project>

@@ -60,6 +60,9 @@
     <select id="getProjectNumByCompanySearch" resultType="java.lang.Integer">
         SELECT COUNT(project.*) FROM project,company WHERE project.company_id=company.id AND company.company_name LIKE #{searchContent};
     </select>
-
+  <select id="getProjectsByUserIDSearch" resultType="com.pcis.smartbus.db.domain.Project">
+       SELECT project.* FROM project,project_user_relation where project.id = project_user_relation.project_id
+ AND project_user_relation.user_id = #{userID}
+    </select>
 
 </mapper>

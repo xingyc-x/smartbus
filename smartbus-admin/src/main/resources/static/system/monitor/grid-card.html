@@ -1,15 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>锁定列</title>
-		<!--框架必需-->
-		<script src="/libs/quickui/libs/js/jquery.js"></script>
-		<script src="/libs/quickui/libs/js/language/cn.js"></script>
-		<script src="/libs/quickui/libs/js/framework.js"></script>
-		<link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
-		<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
-		<link rel="stylesheet" type="text/css" id="customSkin" />
+		<!--框架必需start-->
+		<script type="text/javascript" src="/libs/quickui/libs/js/jquery.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/language/cn.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/framework.js"></script>
+		<link href="/libs/quickui/libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/"/>
+		<link rel="stylesheet" type="text/css" id="customSkin"/>
 		<!--框架必需end-->
 
 		<!--数据表格start-->
@@ -108,25 +108,6 @@
 	</body>
 
 	<script type="text/javascript">
-		// var testData={"form.paginate.pageNo":1,"form.paginate.totalRows":13,"rows":[
-		// 		{"device_id":"IBC0013 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC2334 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC3434 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC3457 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC2346 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC5777 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC7887 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC6487 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC2566 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC4256 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC6757 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC4788 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC9700 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC0678 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC3254 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC5678 ","type":"IBC","address":" "},
-		// 		{"device_id":"IBC5689 ","type":"IBC","address":" "},
-		// 	]}
 
 		//数据表格使用
 		var g;
@@ -134,18 +115,17 @@
 		function initComplete(){
 			$.ajax({
 				//请求地址
-				url: "http://192.168.1.2:8080/project/dataGet?proid=123ABC",
+				url: "/project/dataGet",
 				//请求方式
-				type: "POST",
+				type: "GET",
 				//请求的媒体类型
 				dataType:"text",
 				//数据，json字符串
-				data:{pageNo:"1",pageSize:"10"},
+				data:{pageNo:"1",pageSize:"10",proid:sessionStorage.getItem('project_id')},
 				//请求成功
 				success: function (result) {
 					var obj = eval('(' + result + ')');
 					var testData = obj.rows;
-					alert(JSON.stringify(testData));
 					var html='';
 					for(var i=0;i<testData.length;i++){
 						html+='<li id="box_'+ testData[i].device_id+'">';
@@ -188,7 +168,7 @@
 			//sessionStorage.setItem('deviceIDSeclectedInPage-dataDisplay2D', device_id);
 			var diag = new top.Dialog();
 			diag.Title = "设备详细信息";
-			diag.URL = "../../html/dialog_content_devcie_detail.html";
+			diag.URL = "/system/device-manage/dialog_content_devcie_detail.html";
 			diag.Width = 600;
 			diag.Height = 400;
 			diag.show();

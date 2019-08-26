@@ -2,9 +2,14 @@ package com.pcis.smartbus.utils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
+
+
 
 @Component
 public class RedisUtil {
@@ -79,5 +84,15 @@ public class RedisUtil {
     }
     public Object ListGetOne(String key, long index) {
         return redisTemplate.opsForList().index(key, index);
+    }
+    
+    public Object PopEvent() {
+    	return redisTemplate.opsForList().rightPopAndLeftPush("event", "event");
+    }
+    public void PushEvent(Object em) {
+    	redisTemplate.opsForList().leftPush("event", em);
+    }
+    public void DeleteEvent() {
+    	redisTemplate.opsForList().leftPop("event");
     }
 }

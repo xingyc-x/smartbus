@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>smartbus</artifactId>
+        <groupId>com.pcis</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>smartbus-socket</artifactId>
+    <packaging>jar</packaging>
+	<dependencies>
+	
+	<!-- netty -->
+		<dependency>
+    	<groupId>io.netty</groupId>
+    	<artifactId>netty-all</artifactId> 
+    	<version>4.1.37.Final</version>
+    	</dependency>	
+    	
+    	<!-- netty依赖redis，因此需要先编译socket，顺序不能变 -->
+    	<dependency>
+    		 <groupId>com.pcis</groupId>
+            <artifactId>smartbus-tools</artifactId>
+            <version>${project.version}</version>
+    	</dependency>
+	</dependencies>
+	
+</project>

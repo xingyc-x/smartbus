@@ -103,24 +103,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction) {
-        return userManualMapper.getAPageUser(startNo, pageSize, sortBy, direction);
+    public List<SmartbusUser> getAPageUser(int startNo, int pageSize, String sortBy, String direction, String companyIdString) {
+        return userManualMapper.getAPageUser(startNo, pageSize, sortBy, direction, companyIdString);
     }
 
     @Override
-    public  List<SmartbusUser> getAPageUserBySearch(int startNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput) {
+    public  List<SmartbusUser> getAPageUserBySearch(int startNo, int pageSize, String sortBy, String direction, int searchIf, String searchInput, String companyIdString) {
         switch (searchIf) {
             //查询类型为姓名
             case 1:
-                return userManualMapper.getAPageUserByNameSearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
+                return userManualMapper.getAPageUserByNameSearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%", companyIdString);
 
             //查询类型为单位；
             case 2:
-                return userManualMapper.getAPageUserByCompanySearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%");
+                return userManualMapper.getAPageUserByCompanySearch(startNo, pageSize, sortBy, direction, "%" + searchInput + "%", companyIdString);
 
                 //查询类型为权限等级
              case 3:
-                return userManualMapper.getAPageUserByCapacity(startNo, pageSize, sortBy, direction, Integer.valueOf(searchInput));
+                return userManualMapper.getAPageUserByCapacity(startNo, pageSize, sortBy, direction, Integer.valueOf(searchInput), companyIdString);
             default:
                 return null;
 

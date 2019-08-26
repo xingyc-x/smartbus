@@ -6,6 +6,7 @@ import com.pcis.smartbus.db.domain.Project;
 import com.pcis.smartbus.db.domain.SmartbusUser;
 import com.pcis.smartbus.ucenter.service.UserProjectRelationService;
 import com.pcis.smartbus.ucenter.service.UserService;
+import com.pcis.smartbus.ucenter.utils.MD5Util;
 import com.pcis.smartbus.ucenter.utils.UserUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.pcis.smartbus.common.Constant.NO_PASS;
 import static com.pcis.smartbus.common.Constant.PASS;
@@ -116,12 +118,13 @@ public class AddUserController {
     }
 
     //S3
+    //修改了此处companyId,原为int，现改为String,因为没有新建公司得界面
     @PostMapping(value = "api/user/register")
     public String register(
             @RequestParam("userLoginName")String userLoginName,
             @RequestParam("userPassword")String userPassword,
             @RequestParam("userName")String userName,
-            @RequestParam("userOrganization")int companyId,
+            @RequestParam("userOrganization")String companyId,//改1
             @RequestParam("userTel")String userTel,
             @RequestParam("userEmail")String userEmail,
             @RequestParam("userLevel")int userLevel,
@@ -131,14 +134,18 @@ public class AddUserController {
         int myCapacity = (int) session.getAttribute(Constant.CAPACITY);
         int myId = (int) session.getAttribute(Constant.USER_ID);
         SmartbusUser operatedUser = new SmartbusUser();
+        String salt = UUID.randomUUID().toString().substring(0, 5);
         operatedUser.setUserName(userLoginName);
-        operatedUser.setPassword(userPassword);
+        operatedUser.setSalt(salt);
+        //加入加盐值，进行MD5运算
+        operatedUser.setPassword(MD5Util.MD5(userPassword + salt));
         operatedUser.setRealName(userName);
-        operatedUser.setCompanyId(companyId);
+        operatedUser.setCompanyId(1);
         operatedUser.setPhone(userTel);
         operatedUser.setEmail(userEmail);
         operatedUser.setCapacity(userLevel);
         JSONObject jsonObject = new JSONObject();
+        //添加报警方式
         if (!changeAlarmWay(alarmWays, operatedUser)) {
             jsonObject.put("status", false);
             jsonObject.put("info", "添加用户失败！报警方式解析错误");
@@ -153,6 +160,7 @@ public class AddUserController {
                 //表示用户添加成功
                 if (temp == 1) {
                     jsonObject.put("status", true);
+                    //添加用户和项目的映射表，因为可能是n:n的关系
                     if (addRelation(userLoginName, userProjects)) {
                         jsonObject.put("info", "添加用户成功！");
                     } else {

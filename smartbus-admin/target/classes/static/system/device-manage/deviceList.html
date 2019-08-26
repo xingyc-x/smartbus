@@ -1,15 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>基本表格模板</title>
-        <!--框架必需-->
-        <script src="/libs/quickui/libs/js/jquery.js"></script>
-        <script src="/libs/quickui/libs/js/language/cn.js"></script>
-        <script src="/libs/quickui/libs/js/framework.js"></script>
-        <link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
-        <link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
-        <link rel="stylesheet" type="text/css" id="customSkin" />
+        <!--框架必需start-->
+        <script type="text/javascript" src="/libs/quickui/libs/js/jquery.js"></script>
+        <script type="text/javascript" src="/libs/quickui/libs/js/language/cn.js"></script>
+        <script type="text/javascript" src="/libs/quickui/libs/js/framework.js"></script>
+        <link href="/libs/quickui/libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" scrollerY="false"/>
+        <link rel="stylesheet" type="text/css" id="customSkin"/>
+        <!--框架必需end-->
 
         <!--数据表格start-->
         <script src="/libs/quickui/libs/js/table/quiGrid.js" type="text/javascript"></script>
@@ -81,7 +82,7 @@
                     }
                 ],
                 //服务器数据
-                url: 'http://192.168.1.2:8080/project/dataGet?proid=123ABC',rownumbers:true,usePager:true,pageParmName:"pageNo",pagesizeParmName:"pageSize",
+                url: '/project/dataGet',params:[{name:"proid",value:sessionStorage.getItem('project_id')}],method:'GET',rownumbers:true,usePager:true,pageParmName:"pageNo",pagesizeParmName:"pageSize",
                 height: '100%', width:"100%",pageSize:10,percentWidthMode:true
 
                 // 本地数据
@@ -106,7 +107,7 @@
         function addDevice(){
             var diag = new top.Dialog();
             diag.Title = "添加设备信息";
-            diag.URL = "../../html/dialog_content_add_device.html";
+            diag.URL = "/system/device-manage/dialog_content_add_device.html";
             diag.Width = 800;
             diag.Height = 600;
             diag.show();
@@ -118,7 +119,7 @@
 
             var diag = new top.Dialog();
             diag.Title = "详细信息";
-            diag.URL = "../../html/dialog_content_device_detail2.html";
+            diag.URL = "/system/device-manage/dialog_content_device_detail2.html";
             diag.Width = 400;
             diag.Height = 300;
             diag.show();
@@ -130,7 +131,7 @@
             sessionStorage.setItem('deviceIDSelected', rowName);
             var diag = new top.Dialog();
             diag.Title = "设备运行信息";
-            diag.URL = "../../html/dialog_content_devcie_detail.html";
+            diag.URL = "/system/device-manage/dialog_content_devcie_detail.html";
             diag.Width = 600;
             diag.Height = 400;
             diag.show();

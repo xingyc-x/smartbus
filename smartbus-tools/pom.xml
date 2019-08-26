@@ -12,4 +12,7 @@
     <artifactId>smartbus-tools</artifactId>
     <packaging>jar</packaging>
 
+	<dependencies>
+		
+	</dependencies>
 </project>
