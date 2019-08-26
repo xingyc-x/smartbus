@@ -96,7 +96,7 @@ public class GetUserController {
 
     }
 
-    // 使用搜索的方法获取用户列表，此处有SQL注入漏洞
+    // 使用搜索的方法获取用户列表，此处需注意sql注入
     public String getUserInfoBySearch(int pageNo, int pageSize, String sort, String direction, int searchIf, String searchInput, String companyIdString) {
         String sortBy = changeSortLabel(sort);
         int startNo = getPageStartNo(pageNo, pageSize);

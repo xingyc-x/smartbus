@@ -26,6 +26,8 @@
     <select id="getProjectBy" resultType="com.pcis.smartbus.db.domain.Project">
         SELECT * FROM project WHERE ${label} = #{content};
     </select>
+
+    <!--获取项目信息 当用户是威腾管理员时，可以查看全部项目信息 -->
     <select id="getAPageProject" resultType="com.pcis.smartbus.db.domain.Project">
         <if test="direction == 'asc'">
             SELECT * FROM project ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
@@ -35,9 +37,12 @@
         </if>
     </select>
 
+    <!--获取项目数量 当用户是威腾管理员时，可以查看全部项目信息 -->
     <select id="getProjectNum" resultType="java.lang.Integer">
         SELECT COUNT(id) FROM project;
     </select>
+
+    <!--通过项目编号搜索获取项目信息 当用户是威腾管理员时，可以查看全部项目信息 -->
     <select id="getAPageProjectByOrderSearch" resultType="com.pcis.smartbus.db.domain.Project">
         <if test="direction == 'desc'">
             SELECT * FROM project WHERE `order` LIKE #{searchContent} ORDER BY ${sortBy} DESC LIMIT ${startNo},${pageSize};
@@ -46,6 +51,8 @@
             SELECT * FROM project WHERE `order` LIKE #{searchContent} ORDER BY ${sortBy} LIMIT ${startNo},${pageSize};
         </if>
     </select>
+
+    <!--通过公司名搜索获取项目信息 当用户是威腾管理员时，可以查看全部项目信息 -->
     <select id="getAPageProjectByCompanySearch" resultType="com.pcis.smartbus.db.domain.Project">
         <if test="direction == 'desc'">
             SELECT project.* FROM project,company WHERE project.company_id=company.id AND company.company_name LIKE #{searchContent} ORDER BY company.${sortBy} DESC;
@@ -54,11 +61,62 @@
             SELECT project.* FROM project,company WHERE project.company_id=company.id AND company.company_name LIKE #{searchContent} ORDER BY project.${sortBy};
         </if>
     </select>
+
+    <!--通过项目编号搜索获取项目数量 当用户是威腾管理员时，可以查看全部项目信息 -->
     <select id="getProjectNumByOrderSearch" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM project WHERE `order` LIKE #{searchContent};
     </select>
+
+    <!--通过公司名称搜索获取项目数量 当用户是威腾管理员时，可以查看全部项目信息 -->
     <select id="getProjectNumByCompanySearch" resultType="java.lang.Integer">
-        SELECT COUNT(project.*) FROM project,company WHERE project.company_id=company.id AND company.company_name LIKE #{searchContent};
+        SELECT COUNT(*) FROM project,company WHERE project.company_id=company.id AND company.company_name LIKE #{searchContent};
+    </select>
+
+    <!--下面用户是威腾销售员、客户公司管理员，客户公司运维人员-->
+    <!--获取项目信息 当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息 -->
+    <select id="getAPageProjectByUserId" resultType="com.pcis.smartbus.db.domain.Project">
+        <if test="direction == 'asc'">
+            SELECT project.* FROM project,project_user_relation WHERE project_user_relation.project_id=project.id AND project_user_relation.user_id LIKE ${userIdString} ORDER BY project.${sortBy} LIMIT ${startNo},${pageSize};
+        </if>
+        <if test="direction == 'desc'">
+            SELECT project.* FROM project,project_user_relation WHERE project_user_relation.project_id=project.id AND project_user_relation.user_id=${userIdString} ORDER BY project.${sortBy} DESC LIMIT ${startNo},${pageSize};
+        </if>
+    </select>
+
+    <!--获取项目数量 当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息 -->
+    <!-- when your parameterType is "string", use ${value} instead of ${tablename}.  what is terrible!-->
+    <select id="getProjectNumByUserId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM project,project_user_relation WHERE project_user_relation.project_id=project.id AND project_user_relation.user_id=${value};
+    </select>
+
+    <!--通过项目编号获取项目信息 当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息 -->
+    <select id="getAPageProjectByOrderSearchAndUserId" resultType="com.pcis.smartbus.db.domain.Project">
+        <if test="direction == 'desc'">
+            SELECT project.* FROM project,project_user_relation WHERE project_user_relation.project_id=project.id AND project_user_relation.user_id=${userIdString} AND `order` LIKE #{searchContent} ORDER BY project.${sortBy} DESC LIMIT ${startNo},${pageSize};
+        </if>
+        <if test="direction == 'asc'">
+            SELECT project.* FROM project,project_user_relation WHERE project_user_relation.project_id=project.id AND project_user_relation.user_id=${userIdString} AND `order` LIKE #{searchContent} ORDER BY project.${sortBy} LIMIT ${startNo},${pageSize};
+        </if>
+    </select>
+
+    <!--通过客户公司获取项目信息 当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息 -->
+    <select id="getAPageProjectByCompanySearchAndUserId" resultType="com.pcis.smartbus.db.domain.Project">
+        <if test="direction == 'desc'">
+            SELECT project.* FROM project,company,project_user_relation WHERE project.company_id=company.id AND project_user_relation.project_id=project.id AND project_user_relation.user_id=${userIdString} AND company.company_name LIKE #{searchContent} ORDER BY project.${sortBy} DESC;
+        </if>
+        <if test="direction == 'asc'">
+            SELECT project.* FROM project,company,project_user_relation WHERE project.company_id=company.id AND project_user_relation.project_id=project.id AND project_user_relation.user_id=${userIdString} AND company.company_name LIKE #{searchContent} ORDER BY project.${sortBy};
+        </if>
+    </select>
+
+    <!--通过项目编号获取项目数量 当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息 -->
+    <select id="getProjectNumByOrderSearchAndUserId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM project,project_user_relation WHERE project_user_relation.project_id=project.id AND project_user_relation.user_id=${userIdString} AND `order` LIKE #{searchContent};
+    </select>
+
+    <!--通过客户公司获取项目信息 当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息 -->
+    <select id="getProjectNumByCompanySearchAndUserId" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM project,company,project_user_relation WHERE project_user_relation.project_id=project.id AND project.company_id=company.id AND project_user_relation.user_id=${userIdString} AND company.company_name LIKE #{searchContent};
     </select>
 
 

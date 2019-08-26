@@ -2,12 +2,11 @@ package com.pcis.smartbus.pcenter.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.pcis.smartbus.common.Constant;
-import com.pcis.smartbus.db.dao.ProjectManualMapper;
-import com.pcis.smartbus.db.dao.ProjectMapper;
-import com.pcis.smartbus.db.dao.ProjectUserRelationManualMapper;
+import com.pcis.smartbus.db.dao.*;
 import com.pcis.smartbus.db.domain.Company;
 import com.pcis.smartbus.db.domain.Project;
 import com.pcis.smartbus.db.domain.ProjectUserRelation;
+import com.pcis.smartbus.db.domain.SmartbusUser;
 import com.pcis.smartbus.pcenter.service.ProjectService;
 import com.pcis.smartbus.ucenter.service.CompanyService;
 import org.apache.log4j.Logger;
@@ -25,6 +24,8 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectManualMapper projectManualMapper;
     @Autowired
     CompanyService companyService;
+    @Autowired
+    SmartbusUserMapper smartbusUserMapper;
 
     @Autowired
     ProjectUserRelationManualMapper projectUserRelationManualMapper;
@@ -122,19 +123,52 @@ public class ProjectServiceImpl implements ProjectService {
         return object.toJSONString();
     }
 
+    public String getUserIdString(int userId) {
+        SmartbusUser smartbusUser = smartbusUserMapper.selectByPrimaryKey(userId);
+        if (smartbusUser == null) {
+            return null;
+        }
+        int capacity = smartbusUser.getCapacity();
+        if (capacity == Constant.WEITEN_ADMIN) {
+            return "%";
+        } else {
+            return "'" + userId + "'";
+        }
+    }
+
     @Override
     public String getProjectInfoBySearch(int userId, int pageNo, int pageSize, String sort, String direction, int searchIf, String searchInput) {
         String sortBy = changeSortLabel(sort);
         int startNo = getPageStartNo(pageNo, pageSize);
-        if (searchIf == 1) {
-            List<Project> projects = projectManualMapper.getAPageProjectByOrderSearch(startNo, pageSize, sortBy, direction,"%" + searchInput + "%");
-            int numProject = projectManualMapper.getProjectNumByOrderSearch("%" + searchInput + "%");
-            return packToJson(pageNo, numProject, projects);
+        String userIdString = getUserIdString(userId);
+        if (userIdString == null) {
+            return "";
         }
-        if (searchIf == 2) {
-            List<Project> projects = projectManualMapper.getAPageProjectByCompanySearch(startNo, pageSize, sortBy, direction,"%" + searchInput + "%");
-            int numProject = projectManualMapper.getProjectNumByCompanySearch("%" + searchInput + "%");
-            return packToJson(pageNo, numProject, projects);
+        if (userIdString.equals("%")) {
+            //当用户是威腾管理员时，可以查看全部项目信息
+            if (searchIf == 1) {
+                List<Project> projects = projectManualMapper.getAPageProjectByOrderSearch(startNo, pageSize, sortBy, direction,"%" + searchInput + "%");
+                int numProject = projectManualMapper.getProjectNumByOrderSearch("%" + searchInput + "%");
+                return packToJson(pageNo, numProject, projects);
+            }
+            if (searchIf == 2) {
+                List<Project> projects = projectManualMapper.getAPageProjectByCompanySearch(startNo, pageSize, sortBy, direction,"%" + searchInput + "%");
+                int numProject = projectManualMapper.getProjectNumByCompanySearch("%" + searchInput + "%");
+                return packToJson(pageNo, numProject, projects);
+            }
+        } else {
+            //当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息
+            if (searchIf == 1) {
+                List<Project> projects = projectManualMapper.getAPageProjectByOrderSearchAndUserId(userIdString, startNo, pageSize, sortBy, direction,"%" + searchInput + "%");
+                int numProject = projectManualMapper.getProjectNumByOrderSearchAndUserId(userIdString, "%" + searchInput + "%");
+                return packToJson(pageNo, numProject, projects);
+            }
+            if (searchIf == 2) {
+                System.out.println(searchIf);
+                List<Project> projects = projectManualMapper.getAPageProjectByCompanySearchAndUserId(userIdString, startNo, pageSize, sortBy, direction,"%" + searchInput + "%");
+                int numProject = projectManualMapper.getProjectNumByCompanySearchAndUserId(userIdString, "%" + searchInput + "%");
+                return packToJson(pageNo, numProject, projects);
+            }
         }
         return null;
     }
@@ -143,9 +177,23 @@ public class ProjectServiceImpl implements ProjectService {
     public String getProjectInfo(int userId, int pageNo, int pageSize, String sort, String direction) {
         String sortBy = changeSortLabel(sort);
         int startNo = getPageStartNo(pageNo, pageSize);
-        List<Project> projects = projectManualMapper.getAPageProject(startNo, pageSize, sortBy, direction);
-        int numProject = projectManualMapper.getProjectNum();
-        return packToJson(pageNo, numProject, projects);
+        String userIdString = getUserIdString(userId);
+        if (userIdString == null) {
+            return "";
+        }
+        if (userIdString.equals("%")) {
+            //当用户是威腾管理员时，可以查看全部项目信息
+            List<Project> projects = projectManualMapper.getAPageProject(startNo, pageSize, sortBy, direction);
+            int numProject = projectManualMapper.getProjectNum();
+            return packToJson(pageNo, numProject, projects);
+        } else {
+            //当用户是威腾销售员、客户公司管理员，客户公司运维人员时，仅可以查看与自己绑定的项目信息
+            List<Project> projects = projectManualMapper.getAPageProjectByUserId(userIdString, startNo, pageSize, sortBy, direction);
+            //System.out.println(userIdString);
+            int numProject = projectManualMapper.getProjectNumByUserId(userIdString);
+            return packToJson(pageNo, numProject, projects);
+        }
+
     }
 
     @Override

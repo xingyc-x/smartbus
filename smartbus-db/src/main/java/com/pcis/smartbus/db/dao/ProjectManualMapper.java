@@ -20,4 +20,14 @@ public interface ProjectManualMapper {
     Integer getProjectNumByCompanySearch(String searchContent);
 
     Integer deleteProjectById(int projectId);
+
+    List<Project> getAPageProjectByUserId(String userIdString, int startNo, int pageSize, String sortBy, String direction);
+    Integer getProjectNumByUserId(String userIdString);
+
+    List<Project> getAPageProjectByOrderSearchAndUserId(String userIdString, int startNo, int pageSize, String sortBy, String direction, String searchContent);
+    List<Project> getAPageProjectByCompanySearchAndUserId(String userIdString, int startNo, int pageSize, String sortBy, String direction, String searchContent);
+
+    Integer getProjectNumByOrderSearchAndUserId(String userIdString, String searchContent);
+    Integer getProjectNumByCompanySearchAndUserId(String userIdString, String searchContent);
+
 }

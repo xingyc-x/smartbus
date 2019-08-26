@@ -74,7 +74,7 @@ function addProject() {
     //验证当前用户的权限
     $.get("/api/project/validateUserAuthority",
         function (result) {
-            if (!result) {
+            if (result == '0') {
                 top.Toast("showErrorToast", "您没有该权限！");
             } else {
                 var diag = new top.Dialog();
@@ -102,20 +102,28 @@ function addProject() {
 
 //修改项目信息
 function onEditProject(rowId){
-    var diag = new top.Dialog();
-    diag.ID = "edit_project";
-    diag.Title = "修改项目信息";
-    sessionStorage.setItem("projectId", rowId);
-    diag.URL = "/system/project-manage/project-edit.html";
-    diag.Width = 800;
-    diag.Height = 600;
-    diag.OkButtonText = "保 存";
-    //顺序很重要，diag.show()之前添加确定按钮事件，show之后添加新按钮
-    diag.OKEvent = function() {
-        diag.innerFrame.contentWindow.submitHandler();
-    };
-    diag.show();
+    //验证当前用户的权限
+    $.get("/api/project/validateUserAuthority",
+        function (result) {
+            if (result == '0') {
+                top.Toast("showErrorToast", "您没有该权限！");
+            } else {
+                var diag = new top.Dialog();
+                diag.ID = "edit_project";
+                diag.Title = "修改项目信息";
+                sessionStorage.setItem("projectId", rowId);
+                diag.URL = "/system/project-manage/project-edit.html";
+                diag.Width = 800;
+                diag.Height = 600;
+                diag.OkButtonText = "保 存";
+                //顺序很重要，diag.show()之前添加确定按钮事件，show之后添加新按钮
+                diag.OKEvent = function() {
+                    diag.innerFrame.contentWindow.submitHandler();
+                };
+                diag.show();
+            }
 
+        });
 }
 
 function onViewProjectDetail(rowId){
@@ -134,7 +142,7 @@ function onDeleteProject(rowId){
     //验证当前用户的权限
     $.get("/api/project/validateUserAuthority",
         function (result) {
-            if (!result) {
+            if (result == '0') {
                 top.Toast("showErrorToast", "您没有该权限！");
             } else {
                 top.Dialog.confirm("确定要删除该记录吗？",function(){

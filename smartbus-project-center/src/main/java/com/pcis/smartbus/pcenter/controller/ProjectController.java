@@ -6,8 +6,10 @@ import com.pcis.smartbus.common.Constant;
 import com.pcis.smartbus.common.Utils;
 import com.pcis.smartbus.db.domain.Project;
 import com.pcis.smartbus.db.domain.ProjectUserRelation;
+import com.pcis.smartbus.db.domain.SmartbusUser;
 import com.pcis.smartbus.pcenter.service.ProjectService;
 import com.pcis.smartbus.ucenter.service.UserProjectRelationService;
+import com.pcis.smartbus.ucenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +29,8 @@ public class ProjectController {
     ProjectService projectService;
     @Autowired
     UserProjectRelationService userProjectRelationService;
+    @Autowired
+    UserService userService;
 
     //S2 (revise user S2 use this api either)
     @GetMapping(value = "api/project/getAvailableProject")
@@ -55,6 +59,7 @@ public class ProjectController {
         return temp;
     }
 
+    // 验证用户是否有权限删除与添加项目
     @GetMapping(value = "api/project/validateUserAuthority")
     public String validateUserAuthority(HttpSession session) {
         int myCapacity = (int) session.getAttribute(Constant.CAPACITY);
@@ -71,12 +76,14 @@ public class ProjectController {
         }
     }
 
+    //获取用于项目编辑的信息
     @PostMapping(value = "api/project/getAProjectInfoForEdit")
     public String getAProjectInfoForEdit(@RequestParam("projectId")int projectId, HttpSession session) {
         int myCapacity = (int) session.getAttribute(Constant.CAPACITY);
         int myId = (int) session.getAttribute(Constant.USER_ID);
         Boolean flag = projectService.validateUserToProject(myId, myCapacity, projectId);
-        if ((myCapacity == Constant.WEITEN_SALESMAN || myCapacity == Constant.WEITEN_ADMIN) && flag) {
+        if ((myCapacity == Constant.WEITEN_SALESMAN ||
+                myCapacity == Constant.WEITEN_ADMIN ) && flag) {
             Project project = projectService.getProjectById(projectId);
             JSONObject jsonObject = projectService.packResponseProjectInfo(project, true);
             jsonObject.put("info", project.getIntroduction());
@@ -88,12 +95,14 @@ public class ProjectController {
         }
     }
 
+    // 获取项目详细信息
     @PostMapping(value = "api/project/getAProjectInfoForDetail")
     public String getAProjectInfoForDetail(@RequestParam("projectId")int projectId, HttpSession session) {
         int myCapacity = (int) session.getAttribute(Constant.CAPACITY);
         int myId = (int) session.getAttribute(Constant.USER_ID);
         Boolean flag = projectService.validateUserToProject(myId, myCapacity, projectId);
-        if ((myCapacity == Constant.WEITEN_SALESMAN || myCapacity == Constant.WEITEN_ADMIN) && flag) {
+        //System.out.println(flag);
+        if (flag) {
             Project project = projectService.getProjectById(projectId);
             JSONObject jsonObject = projectService.packResponseProjectInfo(project, false);
             jsonObject.put("info", project.getIntroduction());
@@ -103,7 +112,12 @@ public class ProjectController {
         }
     }
 
-    //for project list
+    //for project list 获得项目列表，前端的入口
+    /*这里需要注意数据库瓶颈问题
+    对于获取数据库表中项目的数量、项目搜索操作无法使用索引增加检索速度
+    这使得数据库存在极大的性瓶颈
+    根据实际测试，当数据库表有数万条数据时，搜索操作耗时十秒以上
+    */
     @PostMapping(value = "api/project/getProjectInfo")
     public String getProjectInfo(
             @RequestParam("pager.pageNo")int pageNo,
@@ -115,13 +129,14 @@ public class ProjectController {
         int searchIf = 0;
         String searchInput = "";
         int myId = (int)request.getSession().getAttribute(Constant.USER_ID);
+
         try {
             searchIf = Integer.valueOf(request.getParameter("searchIf"));
             searchInput = request.getParameter("searchInput");
             //System.out.println(searchInput +"21"+ searchIf);
             return projectService.getProjectInfoBySearch(myId, pageNo, pageSize, sort, direction, searchIf, searchInput);
 
-        } catch (Exception e) {
+        } catch (Exception e){
             //logger.error(e.getMessage());
             return projectService.getProjectInfo(myId, pageNo, pageSize, sort, direction);
         }
