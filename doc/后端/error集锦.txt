@@ -1,0 +1,30 @@
+MySQL: No operations allowed after connection closed
+
+出现异常的原因：
+
+  Mysql在5以后针对超长时间DB连接做了一个处理，Mysql服务器默认的“wait_timeout”是8小时，也就是说一个connection空闲超过8个小时，Mysql将自动断开该connection。所以使用连接池的时候虽然连接对象还在但是链接数据库的时候会一直报这个异常。
+
+解决办法：
+
+  进入MySQL查看设置的时间，show global variables like 'wait_timeout';
+
+1、增加MySQL的 wait_timeout 的时间
+
+windows环境下,修改mysql5的配置文件“my.ini”(mysql5 installation dir)，增加一行：wait_timeout=1814400  （修改时间为21天）,在Linux下叫my.cnf，该文件位于/etc/my.cnf
+
+或者，登录MySQL，使用SQL语句修改，set global wait_timeout=1000000；
+
+2、在DB连接字符串后面加一个参数。当前链接因为超时断掉了，那么驱动程序会自动重新连接数据库
+ jdbc:mysql://localhost:3306/makhtutat?autoReconnect=true
+不过Mysql并不建议使用这个方法。因为第一个DB操作失败的后，第二DB成功前如果出现了重新连接的效果。这个失败操作将不会处于一个事务以内，第二DB操作如果成功的话，这个事务将被提交
+
+重新连接后一些用户变量和临时表的信息也会丢失，不推荐。
+
+3、手动处理异常
+--------------------- 
+作者：Jack__iT 
+来源：CSDN 
+原文：https://blog.csdn.net/Jack__iT/article/details/80467286 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+
+

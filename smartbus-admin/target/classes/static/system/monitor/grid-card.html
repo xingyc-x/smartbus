@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>锁定列</title>
+		<!--框架必需start-->
+		<script type="text/javascript" src="/libs/quickui/libs/js/jquery.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/language/cn.js"></script>
+		<script type="text/javascript" src="/libs/quickui/libs/js/framework.js"></script>
+		<link href="/libs/quickui/libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/"/>
+		<link rel="stylesheet" type="text/css" id="customSkin"/>
+		<!--框架必需end-->
+
+		<!--数据表格start-->
+		<script src="/libs/quickui/libs/js/table/quiGrid.js" type="text/javascript"></script>
+		<!--数据表格end-->
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			em{
+				font-style: normal;
+			}
+			.grid_button{
+				width: 100%;
+				height: 55px;
+			}
+			.button_win{
+				padding: 10px;
+				width: 200px;
+				/*border: 1px solid red;*/
+				float: right;
+			}
+			.grid_card{
+				/*border: 1px solid #D8E3EF;*/
+				/*padding: 10px;*/
+				box-sizing: border-box;
+			}
+			.grid_list{
+
+			}
+			.grid_card{
+				display: none;
+			}
+			.grid_card ul{
+				font-size: 0;
+			}
+
+			.grid_card ul li{
+				width: 230px;
+				/*height: 100px;*/
+				float: left;
+				border: solid 1px #e3e8ee;
+				padding: 10px;
+				box-sizing: border-box;
+				margin: 10px;
+				border-radius: 5px;
+				transition: all .15s ease-in-out;
+			}
+			.grid_card ul li .overTemperature{
+				border-color:red;
+				color: red;
+				backgroud-color:red;
+			}
+			.grid_card ul li:hover{
+				box-shadow: 0 1px 6px rgba(0,0,0,.2);
+				border-color: #eee;
+			}
+			.grid_card ul li span{
+				color: #657180;
+				font-size: 12px;
+				display: block;
+				line-height: 25px;
+			}
+			.grid_card ul li p{
+				display: block;
+				color: #657180;
+				font-size: 14px;
+				line-height: 25px;
+			}
+			.grid_card ul li .tip_win{
+				float: left;
+				/*width: 130px;*/
+			}
+			.grid_card ul li .tip_win a{
+				color:green;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="page_content">
+			<div class="grid_card">
+				<ul class="clearfloat">
+					<!--<li>
+						<div class="tip_win">
+						<p>IBC</p>
+						<span>序号：<em>0</em></span>
+						<span>设备编号：<em>IBC9789</em></span>
+						<span>当前最高：<em>0 ℃</em></span>
+						<span><em><a>详细信息</a></em></span>
+						</div>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+
+		//数据表格使用
+		var g;
+		//该函数应该是框架自定义的，一般用$(document).ready(function(){});
+		function initComplete(){
+			$.ajax({
+				//请求地址
+				url: "/project/dataGet",
+				//请求方式
+				type: "GET",
+				//请求的媒体类型
+				dataType:"text",
+				//数据，json字符串
+				data:{pageNo:"1",pageSize:"10",proid:sessionStorage.getItem('project_id')},
+				//请求成功
+				success: function (result) {
+					var obj = eval('(' + result + ')');
+					var testData = obj.rows;
+					var html='';
+					for(var i=0;i<testData.length;i++){
+						html+='<li id="box_'+ testData[i].device_id+'">';
+						html+='<div class="tip_win">';
+						html+='<p>IBC</p>';
+						html+='<span>序号：<em>'+i+'</em></span>';
+						html+='<span>设备编号：<em>'+testData[i].device_id+'</em></span>';
+						html+='<span id="'+testData[i].device_id+'">数据：<em>'+testData[i].data+' ℃</em></span>';
+						html+='<span><em><a href="javascript:void()" onclick="openDeviceDetail()">详细信息</a></em></span>';
+						html+='</div>';
+						html+='</li>';
+					}
+					$(".grid_card ul").empty().append(html);
+				},
+				//请求失败，包含具体的错误信息
+				error: function (e) {
+					console.log(e.status);
+					console.log(e.responseText);
+				},
+			});
+		}
+		$(".grid_card").show();
+
+		function refreshInfor(s){
+
+			for(var i=0;i<testData.rows.length;i++){
+				//$('#'+testData.rows[i].device_id).innerHTML = "7788";
+				var temperature = Math.floor(Math.random()*15+30);
+				document.getElementById(testData.rows[i].device_id).innerHTML= '温度： '+temperature+'  ℃';
+				if(temperature>43){
+					document.getElementById(testData.rows[i].device_id).parentNode.parentNode.style.borderColor = 'red';
+				}
+				else{
+					document.getElementById(testData.rows[i].device_id).parentNode.parentNode.style.borderColor = '#e3e8ee';
+				}
+			}
+		}
+
+		function openDeviceDetail(){
+			//sessionStorage.setItem('deviceIDSeclectedInPage-dataDisplay2D', device_id);
+			var diag = new top.Dialog();
+			diag.Title = "设备详细信息";
+			diag.URL = "/system/device-manage/dialog_content_devcie_detail.html";
+			diag.Width = 600;
+			diag.Height = 400;
+			diag.show();
+		}
+	</script>
+</html>

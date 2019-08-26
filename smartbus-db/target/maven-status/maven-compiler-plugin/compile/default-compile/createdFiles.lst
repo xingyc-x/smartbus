@@ -1,0 +1,17 @@
+com\pcis\smartbus\db\dao\ProjectManualMapper.class
+com\pcis\smartbus\db\domain\Project.class
+com\pcis\smartbus\db\domain\ProjectUserRelation.class
+com\pcis\smartbus\db\configuration\MyBatisConfiguration.class
+com\pcis\smartbus\db\dao\CompanyManualMapper.class
+com\pcis\smartbus\db\dao\ProjectUserRelationMapper.class
+com\pcis\smartbus\db\dao\ProjectUserRelationManualMapper.class
+com\pcis\smartbus\db\dao\ProjectMapper.class
+com\pcis\smartbus\db\domain\ProjectUserRelation$Column.class
+com\pcis\smartbus\db\domain\SmartbusUser.class
+com\pcis\smartbus\db\dao\UserManualMapper.class
+com\pcis\smartbus\db\dao\CompanyMapper.class
+com\pcis\smartbus\db\dao\SmartbusUserMapper.class
+com\pcis\smartbus\db\domain\Company$Column.class
+com\pcis\smartbus\db\domain\Company.class
+com\pcis\smartbus\db\domain\Project$Column.class
+com\pcis\smartbus\db\domain\SmartbusUser$Column.class

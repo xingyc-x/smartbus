@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pcis.smartbus.db.dao.ProjectUserRelationManualMapper">
+    <resultMap id="BaseResultMap" type="com.pcis.smartbus.db.domain.ProjectUserRelation">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="project_id" jdbcType="INTEGER" property="projectId" />
+        <result column="user_id" jdbcType="INTEGER" property="userId" />
+    </resultMap>
+    <delete id="deleteByUserId">
+        DELETE FROM project_user_relation WHERE user_id=#{userId};
+    </delete>
+    <delete id="deleteByProjectId">
+        DELETE FROM project_user_relation WHERE project_id=#{projectId};
+    </delete>
+    <select id="selectByUserId" resultType="com.pcis.smartbus.db.domain.ProjectUserRelation">
+        SELECT * FROM project_user_relation WHERE user_id=#{userId} ORDER BY project_id;
+    </select>
+
+</mapper>

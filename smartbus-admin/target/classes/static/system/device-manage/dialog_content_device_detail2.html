@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<!--框架必需start-->
+<script type="text/javascript" src="/libs/quickui/libs/js/jquery.js"></script>
+<script type="text/javascript" src="/libs/quickui/libs/js/language/cn.js"></script>
+<script type="text/javascript" src="/libs/quickui/libs/js/framework.js"></script>
+<link href="/libs/quickui/libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/"/>
+<link rel="stylesheet" type="text/css" id="customSkin"/>
+<!--框架必需end-->
+
+<!-- 日期选择框start -->
+<script type="text/javascript" src="/libs/quickui/libs/js/form/datePicker/WdatePicker.js"></script>
+<!-- 日期选择框end -->
+
+<!-- 数字步进器start -->
+<script type="text/javascript" src="/libs/quickui/libs/js/form/stepper.js"></script>
+<!-- 数字步进器end -->
+
+
+<!-- 表单验证start -->
+<script src="/libs/quickui/libs/js/form/validationRule.js" type="text/javascript"></script>
+<script src="/libs/quickui/libs/js/form/validation.js" type="text/javascript"></script>
+<!-- 表单验证end -->
+</head>
+<style>
+.formLayoutContent{
+	border: 0!important;
+}
+.formLayoutContent  .ele{
+	/*在这里自定义表单元素容器宽度*/
+}
+.formLayoutContent  .eleValidateInfo{
+	/*在这里自定义表单元素容器宽度*/
+}
+</style>
+<script>
+	$(document).ready(function(){
+		//top.Toast("showNoticeToast", "此处异步查询用户"+jQuery.jCookie('userNameSelected')+"并填充表格");
+	});
+
+	function openUserDetailRevise(){
+		//jQuery.jCookie('dialog',"123");
+
+		var diag = new top.Dialog();
+		diag.Title = "手动关闭窗口并刷新页面";
+		//diag.URL = "javascript:void(document.write('点击确定按钮'))";
+		diag.URL = "../../html/dialog_content_device_detail_revise.html";
+		diag.Width = 800;
+		diag.Height = 600;
+		/*
+		diag.ShowButtonRow = true;
+		diag.OkButtonText = " 确 定 ";
+		diag.OKEvent = function() {
+			// top.Dialog.alert("成功提交", function() {
+			// 	window.location.reload()
+			// })
+			top.Toast("showNoticeToast", "成功提交")
+			window.location.reload()
+			diag.close();
+		};
+		*/
+		//关闭本弹窗
+		top.Dialog.close();
+		diag.show();
+		
+	}
+</script>
+<body>
+	<div class="page_content">
+		<div class="infoCard">
+			<div class="title">
+				<span>信息展示</span>
+			</div>
+			<div class="content">
+				<table cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td width="100%" class="ver01">
+						<form id="form" method="post" action="">
+							<div class="formLayout">
+								<div class="formLayoutContent">
+									<dl>
+										<dd class="label">设备编号：</dd>
+										<dd class="ele">IBC3434</dd>
+										<div class="clear"></div>
+									</dl>
+									<dl>
+										<dd class="label">设备类型：</dd>
+										<dd class="ele">IBC</dd>
+										<div class="clear"></div>
+									</dl>
+									<dl>
+										<dd class="label">详细地址：</dd>
+										<dd class="ele">二楼东楼梯角</dd>
+										<div class="clear"></div>
+									</dl>
+									<dl>
+										<dd class="label">所属项目ID：</dd>
+										<dd class="ele">778</dd>
+										<div class="clear"></div>
+									</dl>
+									<dl>
+										<dd class="label">注册时间：</dd>
+										<dd class="ele">2019-05-02</dd>
+										<div class="clear"></div>
+									</dl>
+									<dl>
+										<dd class="label">所属分组：</dd>
+										<dd class="ele">1F</dd>
+										<div class="clear"></div>
+									</dl>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</form>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

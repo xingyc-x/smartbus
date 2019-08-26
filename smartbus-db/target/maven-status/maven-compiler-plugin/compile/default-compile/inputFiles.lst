@@ -1,0 +1,13 @@
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\ProjectMapper.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\CompanyMapper.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\domain\ProjectUserRelation.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\CompanyManualMapper.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\domain\SmartbusUser.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\SmartbusUserMapper.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\domain\Company.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\domain\Project.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\ProjectUserRelationManualMapper.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\ProjectManualMapper.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\UserManualMapper.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\configuration\MyBatisConfiguration.java
+G:\github\smartbus\smartbus-db\src\main\java\com\pcis\smartbus\db\dao\ProjectUserRelationMapper.java

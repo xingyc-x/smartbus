@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset = utf-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<style type="text/css">
+	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	/*.anchorBL{ display:none;}  //去除左下角logo*/
+	</style>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=AmsZRaFKFstaqbY7hn6mLICFpgvtjMw1"></script>
+	<title>地图展示</title>
+	<!--框架必需start-->
+	<script type="text/javascript" src="/libs/quickui/libs/js/jquery.js"></script>
+	<script type="text/javascript" src="/libs/quickui/libs/js/language/cn.js"></script>
+	<script type="text/javascript" src="/libs/quickui/libs/js/framework.js"></script>
+	<link href="/libs/quickui/libs/css/import_basic.css" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/"/>
+	<link rel="stylesheet" type="text/css" id="customSkin"/>
+	<!--框架必需end-->
+	<!--数据表格start-->
+	<script src="/libs/quickui/libs/js/table/quiGrid.js" type="text/javascript"></script>
+	<!--数据表格end-->
+</head>
+<body>
+	<div id="leftContent" style="width:25%;float:left;overflow: auto;">
+		<div id="grid"></div>
+	</div>
+	<div id="allmap" style="width:75%;float:left;overflow: auto;"></div>
+</body>
+</html>
+<script type="text/javascript">
+var testData;
+var projects;
+		//延时函数
+		 function sleep(milliSeconds) {
+			var startTime = new Date().getTime();
+			while (new Date().getTime() < startTime + milliSeconds);
+			}
+		// 编写自定义函数,创建标注
+		function addMarker(point,map){
+		  var marker = new BMap.Marker(point);
+		  map.addOverlay(marker);
+		  marker.addEventListener("click",onclickmaker);
+		}
+		
+	    //地图标注点点击跳转页面
+	    function onclickmaker(e){
+	    	var point = e.target.getPosition();
+	    	var projects = testData["rows"];
+	    	//project是一个单元素Array
+	    	var project = projects.filter(p => p.lng == point.lng);
+
+	    	//还要存入session，为2D监测页面服务
+	    	sessionStorage.setItem('project_id', project[0].id);
+	    	window.location.href='grid-card.html?project_id='+project[0].id;
+			//同组切换
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(0).removeClass("active");
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(1).addClass("active"); 
+	    }
+	    
+	    //地图加载事件，根据地图中点的数量更新左侧列表
+	
+	
+	    //数据表格使用
+ 
+		function initComplete(){   
+			 var map = new BMap.Map("allmap", {enableMapClick:false});    // 创建Map实例
+			 
+			 var g = $("#grid").quiGrid({
+                columns: [ 
+                	{ display: '地区', name: 'location',  align: 'center', width: 60 },
+	                { display: '名称', name: 'remarks',  align: 'center', width: "100%" },
+                  	{ display: '操作', isAllowHide: false, align: 'left', width: 60,
+                        render: function (rowdata, rowindex, value, column){
+                        return '<div class="grid_opp_container">'
+                                   + '<span class="grid_opp_view" style="position: relative;top:-12px"onclick="onView(' + rowdata.id + ')">查看</span>'
+                                   + '</div>';
+                     }
+                }
+                ],
+				url:'/project/getavaliableproject', method:'GET',rownumbers:true,usePager:true,pageParmName:"pageNo",pagesizeParmName:"pageSize",
+                height: '100%', width:"100%",pageSize:10,percentWidthMode:true
+            });
+			 //alert(JSON.stringify(g.records));
+			 $.ajax({
+					//请求地址
+					url: "/project/getavaliableproject",
+					//请求方式
+					type: "GET",
+					//请求的媒体类型
+					dataType:"text",
+					//数据，json字符串
+					data:{pageNo:"1",pageSize:"10"},
+					//请求成功
+					success: function (result) {
+						testData = eval('(' + result + ')');
+						projects = testData.rows;
+			
+						 map.centerAndZoom("南京", 7);  // 初始化地图,设置中心点坐标和地图级别
+							map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+						    $.each(projects, function(idx, obj) {
+						    	var point = new BMap.Point(obj.lng,obj.lat);
+						    	//console.log(point);
+								addMarker(point,map);
+						    });
+						    map.addEventListener("tilesloaded",function(){
+						    	var grid_data = {"form.paginate.pageNo":1,"form.paginate.totalRows":8};
+						    	var rows = [];
+						    	var bs = map.getBounds();   //获取可视区域
+						    	var bssw = bs.getSouthWest();   //可视区域左下角
+						    	var bsne = bs.getNorthEast();   //可视区域右上角
+						    	$.each(projects, function(idx, obj) {
+						    		if(bssw.lng<obj.lng && obj.lng<bsne.lng && bssw.lat<obj.lat &&obj.lat<bsne.lat){
+						    			rows.push(JSON.parse(JSON.stringify(obj)));
+						    			//console.log(project);
+						    		}			
+							    });
+						    	grid_data.rows = rows;
+						    	//console.log(rows);
+								//刷新表格
+								g.loadData(grid_data);
+						    	//top.Toast("showNoticeToast", JSON.stringify(grid_data));
+						    });
+					},
+					//请求失败，包含具体的错误信息
+					error: function (e) {
+						console.log(e.status);
+						console.log(e.responseText);
+					},
+				});
+			
+		};
+		
+	    function onView(rowid){
+	    	window.location.href='/system/monitor/grid-card.html?project_id='+rowid;
+	    	//还要存入session，为2D监测页面服务
+	    	sessionStorage.setItem('project_id', rowid);
+			//同组切换
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(0).removeClass("active");
+			$(".menu_content", parent.document).eq(0).show().find("a").eq(1).addClass("active"); 
+	    };
+	    	
+</script>

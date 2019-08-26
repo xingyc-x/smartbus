@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+    <!--框架必需-->
+    <script src="/libs/quickui/libs/js/jquery.js"></script>
+    <script src="/libs/quickui/libs/js/language/cn.js"></script>
+    <script src="/libs/quickui/libs/js/framework.js"></script>
+    <link rel="stylesheet" href="/libs/quickui/libs/css/import_basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" id="skin" prePath="/libs/quickui/" />
+    <link rel="stylesheet" type="text/css" id="customSkin" />
+    <!--框架必需end-->
+
+    <!-- 日期选择框start -->
+    <script type="text/javascript" src="/libs/quickui/libs/js/form/datePicker/WdatePicker.js"></script>
+    <!-- 日期选择框end -->
+
+    <!-- 数字步进器start -->
+    <script type="text/javascript" src="/libs/quickui/libs/js/form/stepper.js"></script>
+    <!-- 数字步进器end -->
+
+
+    <!-- 表单验证start -->
+    <script src="/libs/quickui/libs/js/form/validationRule.js" type="text/javascript"></script>
+    <script src="/libs/quickui/libs/js/form/validation.js" type="text/javascript"></script>
+    <!-- 表单验证end -->
+</head>
+<style>
+    .formLayoutContent{
+        border: 0!important;
+    }
+    .formLayoutContent  .ele{
+        /*在这里自定义表单元素容器宽度*/
+    }
+    .formLayoutContent  .eleValidateInfo{
+        /*在这里自定义表单元素容器宽度*/
+    }
+</style>
+<script>
+    $(document).ready(function(){
+
+    });
+
+</script>
+<body>
+<div class="page_content">
+    <div class="infoCard">
+        <div class="title">
+            <span>信息展示</span>
+        </div>
+        <div class="content">
+            <table cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <!--
+                    <td width="210" class="ver01">
+                        <img src="/libs/quickui/libs/images/demo/demo5.jpg"/>
+                    </td> -->
+                    <td width="100%" class="ver01">
+                        <form id="myFormId" action="" method="post" target="frmright" showOnMouseOver="false">
+                            <div class="formLayout">
+                                <div class="formLayoutContent">
+                                    <table id = "myTable" class="formStyle">
+                                        <input type="hidden" name="userId" value= userId/>
+                                        <tr>
+                                            <td width="110" class="ali03">项目编号：</td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="ali03">客户公司：</td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="ali03">项目地点：</td>
+                                            <td ></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="ali03">项目创建时间：</td>
+                                            <td ></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="ali03">项目简介：</td>
+                                            <td></td>
+                                        </tr>
+
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    //document.getElementById("myTable").rows[4].cells[1].innerHTML = "系统";
+    // var order = getQueryString("order");
+    // //alert(order);
+    // function getQueryString(name) {
+    //     var result = window.location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
+    //     if (result == null || result.length < 1) {
+    //         return "";
+    //     }
+    //     return result[1];
+    // }
+
+    var projectId = sessionStorage.getItem("projectId");
+    sessionStorage.removeItem("projectId");
+
+    $.post("/api/project/getAProjectInfoForDetail",{"projectId":projectId},
+        function(result){
+            document.getElementById("myTable").rows[0].cells[1].innerHTML = result.order;
+            document.getElementById("myTable").rows[1].cells[1].innerHTML = result.company;
+            document.getElementById("myTable").rows[2].cells[1].innerHTML = result.location;
+            document.getElementById("myTable").rows[3].cells[1].innerHTML = result.create_time;
+            document.getElementById("myTable").rows[4].cells[1].innerHTML = result.info;
+        },"json");
+</script>
+</body>
+</html>
